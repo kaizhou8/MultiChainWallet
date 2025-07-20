@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MultiChainWallet.UI.Pages.WalletListPage"
+             Title="钱包列表 / Wallet List">
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto" Padding="20">
+        <!-- 过滤选项 / Filter Options -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,*" Margin="0,0,0,10">
+            <Picker x:Name="GroupFilterPicker"
+                    Title="选择组 / Select Group"
+                    Grid.Column="0"
+                    SelectedIndexChanged="OnGroupFilterChanged"
+                    Margin="0,0,5,0"/>
+            
+            <Picker x:Name="TagFilterPicker"
+                    Title="选择标签 / Select Tag"
+                    Grid.Column="1"
+                    SelectedIndexChanged="OnTagFilterChanged"
+                    Margin="5,0,0,0"/>
+        </Grid>
+        
+        <!-- 搜索和刷新 / Search and Refresh -->
+        <Grid Grid.Row="1" ColumnDefinitions="*,Auto,Auto" Margin="0,0,0,10">
+            <Entry x:Name="SearchEntry"
+                   Placeholder="搜索钱包... / Search wallets..."
+                   Grid.Column="0"/>
+            
+            <Button Text="搜索 / Search"
+                    Grid.Column="1"
+                    Clicked="OnSearchClicked"
+                    Margin="5,0,5,0"/>
+            
+            <Button Text="刷新 / Refresh"
+                    Grid.Column="2"
+                    Clicked="OnRefreshClicked"/>
+        </Grid>
+
+        <!-- 钱包列表 / Wallet List -->
+        <RefreshView Grid.Row="2"
+                     x:Name="WalletsRefreshView"
+                     RefreshColor="Blue"
+                     IsRefreshing="False"
+                     Command="{Binding RefreshCommand}">
+
+            <CollectionView x:Name="WalletsCollection">
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                        <Label Text="没有找到钱包 / No wallets found"
+                               FontSize="18"
+                               HorizontalOptions="Center"/>
+                        <Label Text="点击下方的'添加'按钮创建一个新钱包 / Click the 'Add' button below to create a new wallet"
+                               FontSize="14"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+                
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Margin="0,5" Padding="10">
+                            <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                                <Label Grid.Row="0"
+                                       Grid.Column="0"
+                                       Text="{Binding Name}"
+                                       FontAttributes="Bold"/>
+
+                                <Label Grid.Row="1"
+                                       Grid.Column="0"
+                                       Text="{Binding Address}"
+                                       FontSize="Small"/>
+
+                                <Label Grid.Row="2"
+                                       Grid.Column="0"
+                                       Text="{Binding ChainType}"
+                                       FontSize="Small"/>
+                                
+                                <HorizontalStackLayout Grid.Row="3"
+                                                       Grid.Column="0"
+                                                       Spacing="5">
+                                    <Label Text="组 / Group:"
+                                           FontSize="Small"
+                                           VerticalOptions="Center"/>
+                                    <Label Text="{Binding Group}"
+                                           FontSize="Small"
+                                           VerticalOptions="Center"/>
+                                    
+                                    <Label Text="标签 / Tags:"
+                                           FontSize="Small"
+                                           VerticalOptions="Center"
+                                           Margin="10,0,0,0"/>
+                                    <Label Text="{Binding Tags}"
+                                           FontSize="Small"
+                                           VerticalOptions="Center"/>
+                                </HorizontalStackLayout>
+
+                                <VerticalStackLayout Grid.Row="0"
+                                                     Grid.Column="1"
+                                                     Grid.RowSpan="4"
+                                                     VerticalOptions="Center"
+                                                     HorizontalOptions="End"
+                                                     Spacing="5">
+                                    <Label Text="{Binding Balance}"
+                                           HorizontalOptions="End"/>
+                                    
+                                    <Button Text="详情 / Details"
+                                            FontSize="Small"
+                                            Clicked="OnViewDetailsClicked"
+                                            CommandParameter="{Binding Address}"/>
+                                    
+                                    <Button Text="复制地址 / Copy"
+                                            FontSize="Small"
+                                            Clicked="OnCopyAddressClicked"
+                                            CommandParameter="{Binding Address}"/>
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+        
+        <!-- 添加钱包按钮 / Add Wallet Button -->
+        <Button Grid.Row="3"
+                Text="添加钱包 / Add Wallet"
+                Clicked="OnAddWalletClicked"
+                Margin="0,10,0,0"/>
+    </Grid>
+</ContentPage>

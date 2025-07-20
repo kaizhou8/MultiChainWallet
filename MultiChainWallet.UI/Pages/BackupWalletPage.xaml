@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MultiChainWallet.UI.Pages.BackupWalletPage"
+             Title="备份钱包 / Backup Wallet">
+    <ScrollView>
+        <VerticalStackLayout Spacing="25" Padding="30,0" VerticalOptions="Center">
+            <Entry x:Name="PasswordEntry" 
+                   IsPassword="True" 
+                   Placeholder="输入密码以加密备份 / Enter password to encrypt backup" />
+
+            <Entry x:Name="BackupPathEntry" 
+                   Placeholder="备份文件路径 / Backup file path" />
+
+            <Button x:Name="SelectPathButton"
+                    Text="选择路径 / Select Path"
+                    SemanticProperties.Hint="选择备份文件路径 / Select backup file path"
+                    Clicked="OnSelectPathClicked" />
+
+            <Button x:Name="BackupButton"
+                    Text="开始备份 / Start Backup"
+                    SemanticProperties.Hint="开始备份钱包 / Start wallet backup"
+                    Clicked="OnBackupClicked" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

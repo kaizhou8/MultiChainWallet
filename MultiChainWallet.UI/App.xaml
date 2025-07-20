@@ -1,0 +1,81 @@
+﻿<?xml version = "1.0" encoding = "UTF-8" ?>
+<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:MultiChainWallet.UI"
+             x:Class="MultiChainWallet.UI.App">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
+                <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- 颜色资源 / Color Resources -->
+            <Color x:Key="Primary">#512BD4</Color>
+            <Color x:Key="PrimaryDark">#3700B3</Color>
+            <Color x:Key="Secondary">#DFD8F7</Color>
+            <Color x:Key="White">#FFFFFF</Color>
+            <Color x:Key="Black">#000000</Color>
+            
+            <!-- 灰度色板 / Gray Color Palette -->
+            <Color x:Key="Gray100">#F8F9FA</Color>
+            <Color x:Key="Gray200">#E9ECEF</Color>
+            <Color x:Key="Gray300">#DEE2E6</Color>
+            <Color x:Key="Gray400">#CED4DA</Color>
+            <Color x:Key="Gray500">#ADB5BD</Color>
+            <Color x:Key="Gray600">#6C757D</Color>
+            <Color x:Key="Gray700">#495057</Color>
+            <Color x:Key="Gray800">#343A40</Color>
+            <Color x:Key="Gray900">#212529</Color>
+            <Color x:Key="Gray950">#121212</Color>
+
+            <!-- 按钮样式 / Button Styles -->
+            <Style x:Key="BaseButton" TargetType="Button">
+                <Setter Property="FontFamily" Value="OpenSansRegular"/>
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="CornerRadius" Value="8"/>
+                <Setter Property="Padding" Value="14,10"/>
+                <Setter Property="MinimumHeightRequest" Value="44"/>
+                <Setter Property="MinimumWidthRequest" Value="100"/>
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal" />
+                            <VisualState x:Name="Disabled">
+                                <VisualState.Setters>
+                                    <Setter Property="Opacity" Value="0.5" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+
+            <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource BaseButton}">
+                <Setter Property="BackgroundColor" Value="{StaticResource Primary}"/>
+                <Setter Property="TextColor" Value="{StaticResource White}"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+            </Style>
+
+            <Style x:Key="SecondaryButton" TargetType="Button" BasedOn="{StaticResource BaseButton}">
+                <Setter Property="BackgroundColor" Value="{StaticResource Gray600}"/>
+                <Setter Property="TextColor" Value="{StaticResource White}"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+            </Style>
+
+            <!-- 标签样式 / Label Styles -->
+            <Style x:Key="BaseLabel" TargetType="Label">
+                <Setter Property="FontFamily" Value="OpenSansRegular"/>
+                <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}"/>
+            </Style>
+
+            <!-- 输入框样式 / Entry Styles -->
+            <Style x:Key="BaseEntry" TargetType="Entry">
+                <Setter Property="FontFamily" Value="OpenSansRegular"/>
+                <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"/>
+                <Setter Property="PlaceholderColor" Value="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"/>
+                <Setter Property="BackgroundColor" Value="Transparent"/>
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

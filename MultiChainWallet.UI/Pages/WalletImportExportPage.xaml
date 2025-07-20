@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MultiChainWallet.UI.Pages.WalletImportExportPage"
+             Title="钱包导入/导出 / Wallet Import/Export">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            <!-- 导出部分 / Export Section -->
+            <Frame Padding="15" Margin="0,0,0,10">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="导出钱包 / Export Wallets"
+                           FontSize="20"
+                           FontAttributes="Bold"/>
+                    
+                    <Label Text="将钱包数据导出到JSON文件 / Export wallet data to a JSON file"
+                           FontSize="14"/>
+                    
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Entry x:Name="ExportPathEntry"
+                               Placeholder="导出路径... / Export path..."
+                               Grid.Column="0"/>
+                        <Button Text="浏览 / Browse"
+                                Clicked="OnBrowseExportPathClicked"
+                                Grid.Column="1"
+                                Margin="10,0,0,0"/>
+                    </Grid>
+                    
+                    <Button Text="导出 / Export"
+                            Clicked="OnExportClicked"/>
+                </VerticalStackLayout>
+            </Frame>
+            
+            <!-- 导入部分 / Import Section -->
+            <Frame Padding="15">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="导入钱包 / Import Wallets"
+                           FontSize="20"
+                           FontAttributes="Bold"/>
+                    
+                    <Label Text="从JSON文件导入钱包数据 / Import wallet data from a JSON file"
+                           FontSize="14"/>
+                    
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Entry x:Name="ImportPathEntry"
+                               Placeholder="导入路径... / Import path..."
+                               Grid.Column="0"/>
+                        <Button Text="浏览 / Browse"
+                                Clicked="OnBrowseImportPathClicked"
+                                Grid.Column="1"
+                                Margin="10,0,0,0"/>
+                    </Grid>
+                    
+                    <HorizontalStackLayout>
+                        <CheckBox x:Name="OverwriteCheckBox"/>
+                        <Label Text="覆盖现有钱包 / Overwrite existing wallets"
+                               VerticalOptions="Center"
+                               Margin="5,0,0,0"/>
+                    </HorizontalStackLayout>
+                    
+                    <Button Text="导入 / Import"
+                            Clicked="OnImportClicked"/>
+                </VerticalStackLayout>
+            </Frame>
+            
+            <!-- 状态信息 / Status Information -->
+            <Frame Padding="15" IsVisible="{Binding IsStatusVisible}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="状态 / Status"
+                           FontSize="18"
+                           FontAttributes="Bold"/>
+                    
+                    <Label x:Name="StatusLabel"
+                           Text="{Binding StatusMessage}"
+                           TextColor="{Binding StatusColor}"/>
+                </VerticalStackLayout>
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

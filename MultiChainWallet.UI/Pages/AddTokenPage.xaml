@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            x:Class="MultiChainWallet.UI.Pages.AddTokenPage"
+            Title="Add Token">
+
+    <Grid Padding="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Label Grid.Row="0" 
+               Text="Add New Token" 
+               FontSize="24" 
+               FontAttributes="Bold"
+               Margin="0,0,0,20"/>
+
+        <!-- Input Form -->
+        <StackLayout Grid.Row="1" Margin="0,0,0,20">
+            <Label Text="Contract Address" 
+                   Margin="0,0,0,5"/>
+            <Entry x:Name="ContractAddressEntry"
+                   Margin="0,0,0,15"
+                   TextChanged="ContractAddress_TextChanged"/>
+
+            <!-- Token Info (initially hidden) -->
+            <StackLayout x:Name="TokenInfoPanel" 
+                        IsVisible="false"
+                        Margin="0,10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Row="0" Grid.Column="0" 
+                           Text="Name:" 
+                           Margin="0,0,10,5"/>
+                    <Label Grid.Row="0" Grid.Column="1" 
+                           x:Name="TokenNameText"/>
+
+                    <Label Grid.Row="1" Grid.Column="0" 
+                           Text="Symbol:" 
+                           Margin="0,0,10,5"/>
+                    <Label Grid.Row="1" Grid.Column="1" 
+                           x:Name="TokenSymbolText"/>
+
+                    <Label Grid.Row="2" Grid.Column="0" 
+                           Text="Decimals:" 
+                           Margin="0,0,10,5"/>
+                    <Label Grid.Row="2" Grid.Column="1" 
+                           x:Name="TokenDecimalsText"/>
+                </Grid>
+            </StackLayout>
+        </StackLayout>
+
+        <!-- Buttons -->
+        <HorizontalStackLayout Grid.Row="2" 
+                              Margin="0,10">
+            <Button Text="Add Token"
+                    x:Name="AddTokenButton"
+                    WidthRequest="100"
+                    Margin="0,0,10,0"
+                    IsEnabled="False"
+                    Clicked="AddToken_Click"/>
+            <Button Text="Cancel"
+                    WidthRequest="100"
+                    Clicked="Cancel_Click"/>
+        </HorizontalStackLayout>
+
+        <!-- Status Message -->
+        <Label Grid.Row="3"
+               x:Name="StatusMessage"
+               Margin="0,10"
+               LineBreakMode="WordWrap"/>
+    </Grid>
+</ContentPage>

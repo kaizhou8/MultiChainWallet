@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MultiChainWallet.UI.Pages.SecuritySettingsPage"
+             Title="安全设置 / Security Settings">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20">
+            <!-- 密码验证部分 / Password Verification Section -->
+            <Frame BorderColor="Gray" Padding="15" IsVisible="{Binding IsPasswordVerificationRequired}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="请输入密码以继续 / Please enter password to continue" 
+                           FontSize="16"/>
+                    <Entry Placeholder="输入密码 / Enter password" 
+                           IsPassword="True" 
+                           Text="{Binding Password}"/>
+                    <Button Text="验证 / Verify" 
+                            Command="{Binding VerifyPasswordCommand}"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- 生物识别设置 / Biometric Settings -->
+            <Frame BorderColor="Gray" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="生物识别认证 / Biometric Authentication" 
+                           FontSize="18" 
+                           FontAttributes="Bold"/>
+                    <Label Text="使用Windows Hello进行生物识别验证 / Use Windows Hello for biometric verification"/>
+                    
+                    <HorizontalStackLayout>
+                        <Switch IsToggled="{Binding IsBiometricEnabled}"
+                                IsEnabled="{Binding IsBiometricAvailable}"/>
+                        <Label Text="{Binding BiometricStatusText}" 
+                               VerticalOptions="Center" 
+                               Margin="10,0,0,0"/>
+                    </HorizontalStackLayout>
+                    
+                    <Button Text="测试生物识别 / Test Biometric" 
+                            Command="{Binding TestBiometricCommand}"
+                            IsVisible="{Binding IsBiometricEnabled}"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- TOTP设置 / TOTP Settings -->
+            <Frame BorderColor="Gray" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="TOTP双因素认证 / TOTP Two-Factor Authentication" 
+                           FontSize="18" 
+                           FontAttributes="Bold"/>
+                    <Label Text="使用验证器应用进行双因素认证 / Use authenticator app for two-factor authentication"/>
+                    
+                    <HorizontalStackLayout>
+                        <Switch IsToggled="{Binding IsTotpEnabled}"/>
+                        <Label Text="{Binding TotpStatusText}" 
+                               VerticalOptions="Center" 
+                               Margin="10,0,0,0"/>
+                    </HorizontalStackLayout>
+
+                    <!-- TOTP设置部分 / TOTP Setup Section -->
+                    <VerticalStackLayout IsVisible="{Binding ShowTotpSetup}" Spacing="10">
+                        <Image Source="{Binding TotpQrCodeImageSource}"
+                               HeightRequest="200" 
+                               WidthRequest="200"
+                               HorizontalOptions="Center"/>
+                        <Label Text="{Binding TotpSecretKey}" 
+                               HorizontalOptions="Center"/>
+                        <Entry Placeholder="输入验证码 / Enter verification code" 
+                               Text="{Binding TotpVerificationCode}"
+                               Keyboard="Numeric"/>
+                        <Button Text="验证并启用 / Verify and Enable" 
+                                Command="{Binding VerifyTotpCommand}"/>
+                    </VerticalStackLayout>
+
+                    <!-- TOTP测试部分 / TOTP Test Section -->
+                    <VerticalStackLayout IsVisible="{Binding IsTotpEnabled}" Spacing="10">
+                        <Button Text="测试TOTP / Test TOTP" 
+                                Command="{Binding TestTotpCommand}"/>
+                        <Button Text="禁用TOTP / Disable TOTP" 
+                                Command="{Binding DisableTotpCommand}"/>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- 自动锁定设置 / Auto-Lock Settings -->
+            <Frame BorderColor="Gray" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="自动锁定设置 / Auto-Lock Settings" 
+                           FontSize="18" 
+                           FontAttributes="Bold"/>
+                    
+                    <HorizontalStackLayout>
+                        <Switch IsToggled="{Binding IsAutoLockEnabled}"/>
+                        <Label Text="启用自动锁定 / Enable Auto-Lock" 
+                               VerticalOptions="Center" 
+                               Margin="10,0,0,0"/>
+                    </HorizontalStackLayout>
+                    
+                    <HorizontalStackLayout IsVisible="{Binding IsAutoLockEnabled}">
+                        <Label Text="锁定超时(分钟) / Lock timeout (minutes): " 
+                               VerticalOptions="Center"/>
+                        <Entry Text="{Binding AutoLockTimeout}" 
+                               WidthRequest="50" 
+                               Keyboard="Numeric"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- 交易确认设置 / Transaction Confirmation Settings -->
+            <Frame BorderColor="Gray" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="交易确认设置 / Transaction Confirmation Settings" 
+                           FontSize="18" 
+                           FontAttributes="Bold"/>
+                    
+                    <HorizontalStackLayout>
+                        <Switch IsToggled="{Binding IsTransactionConfirmationEnabled}"/>
+                        <Label Text="启用交易确认 / Enable Transaction Confirmation" 
+                               VerticalOptions="Center" 
+                               Margin="10,0,0,0"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- 保存按钮 / Save Button -->
+            <Button Text="保存设置 / Save Settings" 
+                    Command="{Binding SaveSettingsCommand}"
+                    BackgroundColor="Green"
+                    TextColor="White"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage> 

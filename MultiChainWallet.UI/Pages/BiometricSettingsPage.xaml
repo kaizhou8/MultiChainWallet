@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MultiChainWallet.UI.Pages.BiometricSettingsPage"
+             Title="生物识别设置 | Biometric Settings">
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20" VerticalOptions="Start">
+            
+            <Label Text="生物识别认证 | Biometric Authentication" 
+                   FontSize="26" 
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" 
+                   Margin="0,10,0,20" />
+            
+            <Frame BorderColor="LightGray" 
+                   CornerRadius="10" 
+                   Padding="15" 
+                   Margin="0,0,0,10">
+                <StackLayout>
+                    <HorizontalStackLayout>
+                        <Image Source="fingerprint.png" 
+                               WidthRequest="32" 
+                               HeightRequest="32" />
+                        <Label Text="指纹认证 | Fingerprint Authentication" 
+                               FontSize="18" 
+                               VerticalOptions="Center"
+                               Margin="10,0,0,0" />
+                    </HorizontalStackLayout>
+                    
+                    <Label Text="使用指纹解锁钱包和确认交易 | Use fingerprint to unlock wallet and confirm transactions" 
+                           TextColor="Gray" 
+                           Margin="0,10,0,10" />
+                    
+                    <Switch x:Name="FingerprintToggle" 
+                            IsToggled="{Binding IsFingerprintEnabled}" 
+                            Toggled="OnFingerprintToggled"
+                            HorizontalOptions="End" />
+                </StackLayout>
+            </Frame>
+            
+            <Frame BorderColor="LightGray" 
+                   CornerRadius="10" 
+                   Padding="15" 
+                   Margin="0,0,0,10">
+                <StackLayout>
+                    <HorizontalStackLayout>
+                        <Image Source="faceid.png" 
+                               WidthRequest="32" 
+                               HeightRequest="32" />
+                        <Label Text="面容识别 | Face ID" 
+                               FontSize="18" 
+                               VerticalOptions="Center"
+                               Margin="10,0,0,0" />
+                    </HorizontalStackLayout>
+                    
+                    <Label Text="使用面容识别解锁钱包和确认交易 | Use Face ID to unlock wallet and confirm transactions" 
+                           TextColor="Gray" 
+                           Margin="0,10,0,10" />
+                    
+                    <Switch x:Name="FaceIdToggle" 
+                            IsToggled="{Binding IsFaceIdEnabled}" 
+                            Toggled="OnFaceIdToggled"
+                            HorizontalOptions="End" />
+                </StackLayout>
+            </Frame>
+
+            <Frame BorderColor="LightGray" 
+                   CornerRadius="10" 
+                   Padding="15" 
+                   Margin="0,0,0,10">
+                <StackLayout>
+                    <Label Text="交易确认 | Transaction Confirmation" 
+                           FontSize="18" 
+                           FontAttributes="Bold" />
+                    
+                    <Label Text="为以下操作启用生物识别验证 | Enable biometric verification for the following operations" 
+                           TextColor="Gray" 
+                           Margin="0,10,0,10" />
+                    
+                    <Grid ColumnDefinitions="*,Auto" RowSpacing="15">
+                        <Label Text="转账交易 | Transfer Transactions" 
+                               Grid.Row="0" 
+                               Grid.Column="0" 
+                               VerticalOptions="Center" />
+                        <Switch x:Name="TransferToggle" 
+                                IsToggled="{Binding IsTransferVerificationEnabled}" 
+                                Grid.Row="0" 
+                                Grid.Column="1" />
+                        
+                        <Label Text="代币交换 | Token Swaps" 
+                               Grid.Row="1" 
+                               Grid.Column="0" 
+                               VerticalOptions="Center" />
+                        <Switch x:Name="SwapToggle" 
+                                IsToggled="{Binding IsSwapVerificationEnabled}" 
+                                Grid.Row="1" 
+                                Grid.Column="1" />
+                        
+                        <Label Text="钱包解锁 | Wallet Unlock" 
+                               Grid.Row="2" 
+                               Grid.Column="0" 
+                               VerticalOptions="Center" />
+                        <Switch x:Name="UnlockToggle" 
+                                IsToggled="{Binding IsUnlockVerificationEnabled}" 
+                                Grid.Row="2" 
+                                Grid.Column="1" />
+                    </Grid>
+                </StackLayout>
+            </Frame>
+
+            <Label x:Name="SupportStatusLabel" 
+                   Text="正在检查设备是否支持生物识别... | Checking if your device supports biometrics..." 
+                   TextColor="Gray" 
+                   HorizontalOptions="Center" 
+                   Margin="0,20,0,0" />
+
+            <Button x:Name="TestButton" 
+                    Text="测试生物识别 | Test Biometrics" 
+                    Clicked="OnTestButtonClicked"
+                    Margin="0,20,0,20" 
+                    HorizontalOptions="Fill" />
+            
+            <Button x:Name="SaveButton" 
+                    Text="保存设置 | Save Settings" 
+                    Clicked="OnSaveButtonClicked"
+                    BackgroundColor="DodgerBlue"
+                    TextColor="White"
+                    HorizontalOptions="Fill" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage> 

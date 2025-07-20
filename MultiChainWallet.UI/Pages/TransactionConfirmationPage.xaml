@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MultiChainWallet.UI.Pages.TransactionConfirmationPage"
+             Title="交易确认 / Transaction Confirmation"
+             BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}">
+
+    <ScrollView>
+        <Grid RowDefinitions="Auto,*,Auto" 
+              Padding="20" 
+              RowSpacing="20">
+            
+            <!-- 标题 / Title -->
+            <Label Text="请确认您的交易 / Please Confirm Your Transaction"
+                   Grid.Row="0"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   Margin="0,0,0,10"/>
+
+            <VerticalStackLayout Grid.Row="1" Spacing="20">
+                <!-- 交易详情卡片 / Transaction Details Card -->
+                <Frame BorderColor="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
+                       BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}"
+                       CornerRadius="10"
+                       Padding="20"
+                       HasShadow="True">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="交易详情 / Transaction Details" 
+                               FontSize="20" 
+                               FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}"/>
+
+                        <!-- 发送方 / From -->
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="发送方 / From:" 
+                                   FontSize="14"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"/>
+                            <Label Text="{Binding FromAddress}" 
+                                   FontSize="16"
+                                   LineBreakMode="CharacterWrap"/>
+                        </VerticalStackLayout>
+
+                        <!-- 接收方 / To -->
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="接收方 / To:" 
+                                   FontSize="14"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"/>
+                            <Label Text="{Binding ToAddress}" 
+                                   FontSize="16"
+                                   LineBreakMode="CharacterWrap"/>
+                        </VerticalStackLayout>
+
+                        <!-- 金额和币种 / Amount and Currency -->
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
+                            <VerticalStackLayout Grid.Column="0" Spacing="5">
+                                <Label Text="金额 / Amount:" 
+                                       FontSize="14"
+                                       TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"/>
+                                <Label Text="{Binding Amount}" 
+                                       FontSize="20"
+                                       FontAttributes="Bold"
+                                       TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Primary}}"/>
+                            </VerticalStackLayout>
+                            
+                            <VerticalStackLayout Grid.Column="1" Spacing="5">
+                                <Label Text="币种 / Currency:" 
+                                       FontSize="14"
+                                       TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"/>
+                                <Label Text="{Binding Currency}" 
+                                       FontSize="20"
+                                       FontAttributes="Bold"/>
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <!-- 手续费 / Fee -->
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="手续费 / Fee:" 
+                                   FontSize="14"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"/>
+                            <Label Text="{Binding Fee}" 
+                                   FontSize="16"/>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- 认证方式选择卡片 / Authentication Method Selection Card -->
+                <Frame BorderColor="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
+                       BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}"
+                       CornerRadius="10"
+                       Padding="20"
+                       HasShadow="True">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="选择认证方式 / Select Authentication Method" 
+                               FontSize="20" 
+                               FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}"/>
+
+                        <!-- 生物识别选项 / Biometric Option -->
+                        <HorizontalStackLayout Spacing="15">
+                            <RadioButton Content="生物识别 / Biometric" 
+                                        IsChecked="{Binding UseBiometric}"
+                                        IsEnabled="{Binding IsBiometricAvailable}"/>
+                            <Image Source="fingerprint.png" 
+                                   HeightRequest="24" 
+                                   WidthRequest="24"
+                                   IsVisible="{Binding IsBiometricAvailable}"/>
+                        </HorizontalStackLayout>
+
+                        <!-- TOTP选项 / TOTP Option -->
+                        <HorizontalStackLayout Spacing="15">
+                            <RadioButton Content="TOTP验证码 / TOTP Code" 
+                                        IsChecked="{Binding UseTotp}"
+                                        IsEnabled="{Binding IsTotpEnabled}"/>
+                            <Image Source="authenticator.png" 
+                                   HeightRequest="24" 
+                                   WidthRequest="24"
+                                   IsVisible="{Binding IsTotpEnabled}"/>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- TOTP验证码输入卡片 / TOTP Code Input Card -->
+                <Frame BorderColor="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
+                       BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}"
+                       CornerRadius="10"
+                       Padding="20"
+                       HasShadow="True"
+                       IsVisible="{Binding UseTotp}">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="输入TOTP验证码 / Enter TOTP Code" 
+                               FontSize="16"
+                               FontAttributes="Bold"/>
+                        <Entry Placeholder="输入6位验证码 / Enter 6-digit code" 
+                               Text="{Binding TotpCode}"
+                               Keyboard="Numeric"
+                               MaxLength="6"
+                               HorizontalTextAlignment="Center"
+                               FontSize="24"
+                               Margin="40,0"/>
+                    </VerticalStackLayout>
+                </Frame>
+            </VerticalStackLayout>
+
+            <!-- 按钮区域 / Button Area -->
+            <VerticalStackLayout Grid.Row="2" 
+                                Spacing="10" 
+                                Margin="0,10,0,0">
+                <Button Text="确认交易 / Confirm Transaction" 
+                        Command="{Binding ConfirmTransactionCommand}"
+                        Style="{StaticResource PrimaryButton}"
+                        HeightRequest="50"
+                        FontAttributes="Bold"/>
+                
+                <Button Text="取消 / Cancel" 
+                        Command="{Binding CancelCommand}"
+                        Style="{StaticResource SecondaryButton}"
+                        HeightRequest="50"
+                        FontAttributes="Bold"/>
+
+                <!-- 加载指示器 / Loading Indicator -->
+                <ActivityIndicator IsRunning="{Binding IsBusy}" 
+                                 IsVisible="{Binding IsBusy}"
+                                 HeightRequest="30"
+                                 WidthRequest="30"
+                                 Color="{StaticResource Primary}"/>
+            </VerticalStackLayout>
+        </Grid>
+    </ScrollView>
+</ContentPage> 

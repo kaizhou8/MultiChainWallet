@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            x:Class="MultiChainWallet.UI.Pages.SendTokenPage"
+            Title="Send Token">
+
+    <Grid Padding="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackLayout Grid.Row="0" Margin="0,0,0,20">
+            <Label Text="Send Token" 
+                   FontSize="24" 
+                   FontAttributes="Bold"/>
+            <HorizontalStackLayout Margin="0,10,0,0">
+                <Label Text="Token: "/>
+                <Label x:Name="TokenSymbolText" 
+                       FontAttributes="Bold"/>
+                <Label Text=" - Balance: "/>
+                <Label x:Name="TokenBalanceText"/>
+            </HorizontalStackLayout>
+        </StackLayout>
+
+        <!-- Send Form -->
+        <StackLayout Grid.Row="1" Margin="0,0,0,20">
+            <Label Text="Recipient Address" 
+                   Margin="0,0,0,5"/>
+            <Entry x:Name="RecipientAddressEntry"
+                   Margin="0,0,0,15"
+                   TextChanged="RecipientAddress_TextChanged"/>
+            
+            <Label Text="Amount" 
+                   Margin="0,0,0,5"/>
+            <Grid Margin="0,0,0,15">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Entry x:Name="AmountEntry"
+                       Grid.Column="0"
+                       TextChanged="Amount_TextChanged"/>
+                <Label x:Name="TokenSymbolLabel"
+                       Grid.Column="1"
+                       Margin="10,0,0,0"
+                       VerticalOptions="Center"/>
+            </Grid>
+
+            <!-- USD Value -->
+            <HorizontalStackLayout Margin="0,0,0,15">
+                <Label Text="≈ $"/>
+                <Label x:Name="USDValueText"/>
+            </HorizontalStackLayout>
+
+            <!-- Gas Fee Estimate -->
+            <StackLayout x:Name="GasFeePanel" 
+                        IsVisible="false"
+                        Margin="0,10">
+                <Label Text="Estimated Gas Fee:" 
+                       Margin="0,0,0,5"/>
+                <Label x:Name="GasFeeText"/>
+            </StackLayout>
+
+            <!-- Password Entry -->
+            <Label Text="Password" 
+                   Margin="0,0,0,5"/>
+            <Entry x:Name="PasswordEntry"
+                   IsPassword="true"
+                   Margin="0,0,0,15"/>
+        </StackLayout>
+
+        <!-- Buttons -->
+        <HorizontalStackLayout Grid.Row="2" 
+                              Margin="0,10">
+            <Button Text="Send"
+                    x:Name="SendButton"
+                    WidthRequest="100"
+                    Margin="0,0,10,0"
+                    IsEnabled="False"
+                    Clicked="Send_Click"/>
+            <Button Text="Cancel"
+                    WidthRequest="100"
+                    Clicked="Cancel_Click"/>
+        </HorizontalStackLayout>
+
+        <!-- Status Message -->
+        <Label Grid.Row="3"
+               x:Name="StatusMessage"
+               Margin="0,10"
+               LineBreakMode="WordWrap"/>
+
+        <!-- Loading Indicator -->
+        <ActivityIndicator Grid.Row="0"
+                          Grid.RowSpan="4"
+                          x:Name="LoadingIndicator"
+                          IsVisible="false"
+                          IsRunning="false"
+                          HorizontalOptions="Center"
+                          VerticalOptions="Center"/>
+    </Grid>
+</ContentPage>

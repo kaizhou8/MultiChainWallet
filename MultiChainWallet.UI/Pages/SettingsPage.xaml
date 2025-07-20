@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MultiChainWallet.UI.Pages.SettingsPage"
+             Title="设置 / Settings">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20">
+            <!-- 安全设置 Security Settings -->
+            <Frame Padding="15" Margin="0,0,0,10">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="安全设置 / Security Settings"
+                           FontSize="20"
+                           FontAttributes="Bold"/>
+
+                    <HorizontalStackLayout>
+                        <Label Text="启用生物识别 / Enable Biometrics"
+                               VerticalOptions="Center"/>
+                        <Switch x:Name="BiometricsSwitch"
+                                IsToggled="{Binding IsBiometricsEnabled}"
+                                Toggled="OnBiometricsSwitchToggled"
+                                HorizontalOptions="EndAndExpand"/>
+                    </HorizontalStackLayout>
+
+                    <Button Text="生物识别设置 / Biometric Settings"
+                            Clicked="OnBiometricSettingsClicked"/>
+
+                    <Button Text="修改密码 / Change Password"
+                            Clicked="OnChangePasswordClicked"/>
+
+                    <Button Text="备份钱包 / Backup Wallet"
+                            Clicked="OnBackupWalletClicked"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- 钱包管理 Wallet Management -->
+            <Frame Padding="15" Margin="0,0,0,10">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="钱包管理 / Wallet Management"
+                           FontSize="20"
+                           FontAttributes="Bold"/>
+
+                    <Button Text="钱包组管理 / Wallet Groups"
+                            Clicked="OnWalletGroupsClicked"/>
+
+                    <Button Text="钱包标签管理 / Wallet Tags"
+                            Clicked="OnWalletTagsClicked"/>
+
+                    <Button Text="导入/导出钱包 / Import/Export Wallets"
+                            Clicked="OnWalletImportExportClicked"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- 网络设置 Network Settings -->
+            <Frame Padding="15" Margin="0,0,0,10">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="网络设置 / Network Settings"
+                           FontSize="20"
+                           FontAttributes="Bold"/>
+
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto">
+                        <Label Text="以太坊网络 / Ethereum Network"
+                               Grid.Row="0" Grid.Column="0"/>
+                        <Picker x:Name="EthereumNetworkPicker"
+                                Grid.Row="0" Grid.Column="1"
+                                SelectedIndexChanged="OnEthereumNetworkChanged">
+                            <Picker.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>主网 / Mainnet</x:String>
+                                    <x:String>测试网 / Testnet</x:String>
+                                </x:Array>
+                            </Picker.ItemsSource>
+                        </Picker>
+
+                        <Label Text="比特币网络 / Bitcoin Network"
+                               Grid.Row="1" Grid.Column="0"/>
+                        <Picker x:Name="BitcoinNetworkPicker"
+                                Grid.Row="1" Grid.Column="1"
+                                SelectedIndexChanged="OnBitcoinNetworkChanged">
+                            <Picker.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>主网 / Mainnet</x:String>
+                                    <x:String>测试网 / Testnet</x:String>
+                                </x:Array>
+                            </Picker.ItemsSource>
+                        </Picker>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- 语言设置 Language Settings -->
+            <Frame Padding="15">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="语言设置 / Language Settings"
+                           FontSize="20"
+                           FontAttributes="Bold"/>
+
+                    <Picker x:Name="LanguagePicker"
+                            SelectedIndexChanged="OnLanguageChanged">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>中文 / Chinese</x:String>
+                                <x:String>English / 英文</x:String>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- 版本信息 Version Info -->
+            <Frame Padding="15">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="关于 / About"
+                           FontSize="20"
+                           FontAttributes="Bold"/>
+                    <Label Text="版本 / Version: 1.0.0"/>
+                    <Label Text="© 2025 MultiChainWallet"/>
+                </VerticalStackLayout>
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

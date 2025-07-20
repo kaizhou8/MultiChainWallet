@@ -1,0 +1,61 @@
+# Auto detect text files and perform LF normalization
+* text=auto eol=lf
+
+# Force CRLF for Windows specific files
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+*.sh text eol=lf
+
+# Force binary for binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.dll binary
+*.exe binary
+*.so binary
+*.dylib binary
+*.pdb binary
+*.lib binary
+*.dll binary
+*.exe binary
+*.so binary
+*.dylib binary
+*.pdb binary
+*.lib binary
+*.snupkg binary
+*.nupkg binary
+*.nuspec text eol=crlf
+
+# Force LF for all C# source files
+*.cs text eol=lf
+*.csproj text eol=crlf
+*.sln text eol=crlf
+*.json text eol=lf
+*.config text eol=crlf
+*.props text eol=crlf
+*.targets text eol=crlf
+*.md text eol=lf
+*.txt text eol=lf
+*.xml text eol=lf
+*.xaml text eol=lf
+*.resx text eol=lf
+*.cshtml text eol=lf
+*.razor text eol=lf
+*.css text eol=lf
+*.scss text eol=lf
+*.js text eol=lf
+*.ts text eol=lf
+*.html text eol=lf
+*.htm text eol=lf
+*.cshtml text eol=lf
+*.razor text eol=lf
+*.cshtml.cs text eol=lf
+*.razor.cs text eol=lf
+*.editorconfig text eol=lf
+*.gitattributes text eol=lf
+*.gitignore text eol=lf

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MultiChainWallet.UI.Pages.TransactionHistoryPage"
+             Title="交易历史 / Transaction History">
+
+    <Grid RowDefinitions="Auto,*" Padding="20">
+        <!-- 筛选器 Filters -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,*,Auto" Margin="0,0,0,10">
+            <Picker x:Name="WalletPicker"
+                    Grid.Column="0"
+                    Title="选择钱包 / Select Wallet"
+                    SelectedIndexChanged="OnWalletSelected"
+                    Margin="0,0,5,0"/>
+            
+            <Picker x:Name="TypePicker"
+                    Grid.Column="1"
+                    Title="交易类型 / Transaction Type"
+                    SelectedIndexChanged="OnTypeSelected"
+                    Margin="5,0">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>全部 / All</x:String>
+                        <x:String>发送 / Send</x:String>
+                        <x:String>接收 / Receive</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+
+            <Button Grid.Column="2"
+                    Text="刷新 / Refresh"
+                    Clicked="OnRefreshClicked"
+                    Margin="5,0,0,0"/>
+        </Grid>
+
+        <!-- 交易列表 Transaction List -->
+        <RefreshView Grid.Row="1"
+                     x:Name="TransactionsRefreshView"
+                     IsRefreshing="{Binding IsRefreshing}"
+                     Command="{Binding RefreshCommand}">
+            <CollectionView x:Name="TransactionsCollection"
+                          ItemsSource="{Binding Transactions}"
+                          SelectionMode="Single"
+                          SelectionChanged="OnTransactionSelected">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Margin="0,5" Padding="10">
+                            <Grid RowDefinitions="Auto,Auto,Auto" 
+                                  ColumnDefinitions="Auto,*,Auto">
+                                <!-- 交易类型图标 Transaction Type Icon -->
+                                <Image Grid.Row="0" 
+                                       Grid.Column="0"
+                                       Grid.RowSpan="2"
+                                       Source="{Binding TypeIcon}"
+                                       HeightRequest="40"
+                                       WidthRequest="40"
+                                       Margin="0,0,10,0"/>
+
+                                <!-- 交易信息 Transaction Info -->
+                                <Label Grid.Row="0" 
+                                       Grid.Column="1"
+                                       Text="{Binding Type}"
+                                       FontAttributes="Bold"/>
+                                
+                                <Label Grid.Row="1" 
+                                       Grid.Column="1"
+                                       Text="{Binding Address}"
+                                       FontSize="Small"/>
+                                
+                                <Label Grid.Row="2" 
+                                       Grid.Column="1"
+                                       Text="{Binding DateTime}"
+                                       FontSize="Small"
+                                       TextColor="Gray"/>
+
+                                <!-- 金额 Amount -->
+                                <VerticalStackLayout Grid.Row="0" 
+                                                   Grid.Column="2"
+                                                   Grid.RowSpan="2"
+                                                   HorizontalOptions="End">
+                                    <Label Text="{Binding Amount}"
+                                           HorizontalOptions="End"
+                                           FontAttributes="Bold"/>
+                                    <Label Text="{Binding Status}"
+                                           HorizontalOptions="End"
+                                           FontSize="Small"
+                                           TextColor="{Binding StatusColor}"/>
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout VerticalOptions="Center" 
+                                       HorizontalOptions="Center">
+                        <Label Text="暂无交易记录 / No transactions"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+            </CollectionView>
+        </RefreshView>
+    </Grid>
+</ContentPage>

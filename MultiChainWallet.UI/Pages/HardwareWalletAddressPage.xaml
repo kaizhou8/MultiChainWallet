@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MultiChainWallet.UI.Pages.HardwareWalletAddressPage"
+             Title="硬件钱包地址 / Hardware Wallet Address">
+    <ScrollView>
+        <VerticalStackLayout Spacing="25" Padding="30">
+            <Label 
+                Text="硬件钱包地址管理 / Hardware Wallet Address Management"
+                FontSize="24"
+                HorizontalOptions="Center" />
+            
+            <Frame BorderColor="LightGray" Padding="15" Margin="0,10,0,0">
+                <VerticalStackLayout Spacing="15">
+                    <Label 
+                        Text="连接状态 / Connection Status"
+                        FontSize="16" />
+                    
+                    <Label 
+                        x:Name="ConnectionStatusLabel"
+                        Text="未连接 / Not Connected"
+                        TextColor="Red"
+                        FontSize="14" />
+                    
+                    <Button 
+                        x:Name="ConnectWalletButton"
+                        Text="连接硬件钱包 / Connect Hardware Wallet"
+                        Clicked="ConnectWalletButton_Clicked"
+                        HorizontalOptions="Fill" />
+                </VerticalStackLayout>
+            </Frame>
+            
+            <Frame x:Name="AddressFrame" BorderColor="LightGray" Padding="15" IsVisible="False">
+                <VerticalStackLayout Spacing="15">
+                    <Label 
+                        Text="获取地址 / Get Address"
+                        FontSize="16" />
+                    
+                    <Picker x:Name="CoinTypePicker" 
+                            Title="选择币种 / Select Coin Type"
+                            SelectedIndexChanged="CoinTypePicker_SelectedIndexChanged">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>以太坊 / Ethereum</x:String>
+                                <x:String>比特币 / Bitcoin</x:String>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+                    
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" RowSpacing="10" ColumnSpacing="15">
+                        <Label Grid.Row="0" Grid.Column="0" Text="账户索引 / Account Index:" VerticalOptions="Center" />
+                        <Entry Grid.Row="0" Grid.Column="1" x:Name="AccountIndexEntry" Text="0" Keyboard="Numeric" />
+                        
+                        <Label Grid.Row="1" Grid.Column="0" Text="地址索引 / Address Index:" VerticalOptions="Center" />
+                        <Entry Grid.Row="1" Grid.Column="1" x:Name="AddressIndexEntry" Text="0" Keyboard="Numeric" />
+                    </Grid>
+                    
+                    <Button 
+                        x:Name="GetAddressButton"
+                        Text="获取地址 / Get Address"
+                        Clicked="GetAddressButton_Clicked"
+                        HorizontalOptions="Fill" />
+                    
+                    <ActivityIndicator 
+                        x:Name="AddressIndicator"
+                        IsRunning="False"
+                        IsVisible="False"
+                        HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </Frame>
+            
+            <Frame x:Name="AddressResultFrame" BorderColor="LightGray" Padding="15" IsVisible="False">
+                <VerticalStackLayout Spacing="15">
+                    <Label 
+                        Text="地址信息 / Address Information"
+                        FontSize="16" />
+                    
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto" RowSpacing="10" ColumnSpacing="15">
+                        <Label Grid.Row="0" Grid.Column="0" Text="币种 / Coin Type:" FontAttributes="Bold" />
+                        <Label Grid.Row="0" Grid.Column="1" x:Name="CoinTypeLabel" />
+                        
+                        <Label Grid.Row="1" Grid.Column="0" Text="派生路径 / Derivation Path:" FontAttributes="Bold" />
+                        <Label Grid.Row="1" Grid.Column="1" x:Name="DerivationPathLabel" />
+                        
+                        <Label Grid.Row="2" Grid.Column="0" Text="地址 / Address:" FontAttributes="Bold" />
+                        <Label Grid.Row="2" Grid.Column="1" x:Name="AddressLabel" />
+                    </Grid>
+                    
+                    <Button 
+                        x:Name="VerifyAddressButton"
+                        Text="在设备上验证地址 / Verify Address on Device"
+                        Clicked="VerifyAddressButton_Clicked"
+                        HorizontalOptions="Fill" />
+                    
+                    <Button 
+                        x:Name="CopyAddressButton"
+                        Text="复制地址 / Copy Address"
+                        Clicked="CopyAddressButton_Clicked"
+                        HorizontalOptions="Fill" />
+                    
+                    <Button 
+                        x:Name="ImportAddressButton"
+                        Text="导入到钱包 / Import to Wallet"
+                        Clicked="ImportAddressButton_Clicked"
+                        HorizontalOptions="Fill" />
+                </VerticalStackLayout>
+            </Frame>
+            
+            <Frame x:Name="AddressListFrame" BorderColor="LightGray" Padding="15" IsVisible="False">
+                <VerticalStackLayout Spacing="15">
+                    <Label 
+                        Text="已导入地址 / Imported Addresses"
+                        FontSize="16" />
+                    
+                    <CollectionView x:Name="AddressCollectionView" EmptyView="没有已导入的地址 / No imported addresses">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="10" ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                                    <Label Grid.Row="0" Grid.Column="0" Text="{Binding Address}" FontAttributes="Bold" />
+                                    <Label Grid.Row="1" Grid.Column="0" Text="{Binding Path}" FontSize="Small" />
+                                    <Button Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" 
+                                            Text="验证 / Verify" 
+                                            CommandParameter="{Binding .}"
+                                            Clicked="VerifyImportedAddress_Clicked"
+                                            HeightRequest="40"
+                                            WidthRequest="80"
+                                            FontSize="12" />
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage> 

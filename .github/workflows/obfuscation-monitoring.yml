@@ -1,0 +1,177 @@
+name: Obfuscation Performance Monitoring
+
+on:
+  # 在主分支上的推送触发
+  # Triggered by pushes to the main branch
+  push:
+    branches: [ main ]
+    paths:
+      - 'MultiChainWallet.Core/**'
+      - 'MultiChainWallet.Infrastructure/**'
+  
+  # 在拉取请求中触发
+  # Triggered in pull requests
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'MultiChainWallet.Core/**'
+      - 'MultiChainWallet.Infrastructure/**'
+  
+  # 允许手动触发
+  # Allow manual triggering
+  workflow_dispatch:
+  
+  # 每周一次的定时触发
+  # Scheduled trigger once a week
+  schedule:
+    - cron: '0 0 * * 1'  # 每周一午夜 / Every Monday at midnight
+
+jobs:
+  monitor-obfuscation-performance:
+    name: Monitor Obfuscation Performance
+    runs-on: windows-latest
+    
+    steps:
+      - name: 检出代码 / Checkout code
+        uses: actions/checkout@v2
+      
+      - name: 设置 .NET / Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.0.x'
+      
+      - name: 缓存 NuGet 包 / Cache NuGet packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+      
+      - name: 缓存性能历史数据 / Cache performance history data
+        uses: actions/cache@v2
+        with:
+          path: PerformanceHistory
+          key: ${{ runner.os }}-perf-history-${{ github.ref }}
+          restore-keys: |
+            ${{ runner.os }}-perf-history-
+      
+      - name: 运行混淆性能监控 / Run obfuscation performance monitoring
+        id: monitor
+        shell: pwsh
+        run: |
+          ./tools/integrate-monitoring-cicd.ps1 -AutoOptimize:${{ github.event_name == 'schedule' }} -WarningThreshold 10 -CriticalThreshold 20
+      
+      - name: 上传性能报告 / Upload performance reports
+        uses: actions/upload-artifact@v2
+        with:
+          name: performance-reports
+          path: artifacts/PerformanceReports
+          if-no-files-found: warn
+      
+      - name: 检查性能回归 / Check for performance regressions
+        shell: pwsh
+        run: |
+          $latestReport = Get-ChildItem -Path "PerformanceHistory" -Filter "MonitoringReport_*.md" | 
+                          Sort-Object LastWriteTime -Descending | 
+                          Select-Object -First 1
+          
+          if ($latestReport) {
+            $reportContent = Get-Content -Path $latestReport.FullName -Raw
+            
+            if ($reportContent -match "状态 / Status:\s*❌ 严重 / Critical") {
+              Write-Host "::warning::检测到严重性能问题，请查看性能报告 / Critical performance issues detected, please check performance reports"
+              
+              # 如果是拉取请求，添加评论
+              # If it's a pull request, add a comment
+              if ('${{ github.event_name }}' -eq 'pull_request') {
+                $body = @"
+## ⚠️ 混淆性能警告 / Obfuscation Performance Warning
+
+检测到严重的混淆性能问题。这可能会影响应用程序的用户体验。
+Severe obfuscation performance issues detected. This may affect the application's user experience.
+
+请查看性能报告构件以获取详细信息。
+Please check the performance reports artifact for details.
+
+### 建议 / Recommendations
+- 检查最近的代码更改，特别是与反射相关的更改
+- Check recent code changes, especially those related to reflection
+- 考虑使用 `ReflectionHelper` 类优化反射操作
+- Consider using the `ReflectionHelper` class to optimize reflection operations
+- 考虑调整混淆配置，减少对性能关键路径的混淆强度
+- Consider adjusting obfuscation configuration to reduce obfuscation intensity for performance-critical paths
+"@
+                
+                $url = "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments"
+                $headers = @{
+                  "Authorization" = "token ${{ secrets.GITHUB_TOKEN }}"
+                  "Accept" = "application/vnd.github.v3+json"
+                }
+                $body = ConvertTo-Json @{ "body" = $body }
+                
+                Invoke-RestMethod -Uri $url -Method Post -Headers $headers -Body $body -ContentType "application/json"
+              }
+            }
+            elseif ($reportContent -match "状态 / Status:\s*⚠️ 警告 / Warning") {
+              Write-Host "::warning::检测到性能警告，请查看性能报告 / Performance warnings detected, please check performance reports"
+            }
+            else {
+              Write-Host "::notice::性能测试通过，未检测到问题 / Performance tests passed, no issues detected"
+            }
+          }
+      
+      # 如果是定时任务并且检测到严重问题，创建问题
+      # If it's a scheduled job and severe issues are detected, create an issue
+      - name: 创建性能问题工单 / Create performance issue ticket
+        if: github.event_name == 'schedule'
+        shell: pwsh
+        run: |
+          $latestReport = Get-ChildItem -Path "PerformanceHistory" -Filter "MonitoringReport_*.md" | 
+                          Sort-Object LastWriteTime -Descending | 
+                          Select-Object -First 1
+          
+          if ($latestReport) {
+            $reportContent = Get-Content -Path $latestReport.FullName -Raw
+            
+            if ($reportContent -match "状态 / Status:\s*❌ 严重 / Critical") {
+              $title = "混淆性能回归检测 - $(Get-Date -Format 'yyyy-MM-dd') / Obfuscation Performance Regression Detected - $(Get-Date -Format 'yyyy-MM-dd')"
+              
+              $body = @"
+## 混淆性能回归检测
+## Obfuscation Performance Regression Detected
+
+在定期性能监控中检测到严重的混淆性能问题。
+Severe obfuscation performance issues detected in regular performance monitoring.
+
+### 详细信息 / Details
+```
+$(($reportContent -split '## 严重性能问题')[1] -split '##')[0].Trim()
+```
+
+### 建议的优化措施 / Recommended Optimization Measures
+```
+$(($reportContent -split '### 建议的优化措施')[1] -split '##')[0].Trim()
+```
+
+请尽快解决这些性能问题，以确保应用程序的良好用户体验。
+Please address these performance issues as soon as possible to ensure a good user experience for the application.
+
+/cc @performance-team
+"@
+              
+              $url = "https://api.github.com/repos/${{ github.repository }}/issues"
+              $headers = @{
+                "Authorization" = "token ${{ secrets.GITHUB_TOKEN }}"
+                "Accept" = "application/vnd.github.v3+json"
+              }
+              $issueBody = ConvertTo-Json @{
+                "title" = $title
+                "body" = $body
+                "labels" = @("performance", "obfuscation", "regression")
+              }
+              
+              Invoke-RestMethod -Uri $url -Method Post -Headers $headers -Body $issueBody -ContentType "application/json"
+              Write-Host "已创建性能回归问题工单 / Created performance regression issue ticket"
+            }
+          } 

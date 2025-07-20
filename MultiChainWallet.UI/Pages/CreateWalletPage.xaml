@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MultiChainWallet.UI.Pages.CreateWalletPage"
+             Title="创建钱包 / Create Wallet">
+    
+    <VerticalStackLayout Spacing="20" Padding="30,0" VerticalOptions="Center">
+        
+        <Label 
+            Text="选择链类型 / Select Chain Type"
+            FontSize="20"
+            HorizontalOptions="Center" />
+
+        <Picker x:Name="ChainTypePicker"
+                Title="选择链类型 / Select Chain Type"
+                HorizontalOptions="Fill">
+            <Picker.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>以太坊 / Ethereum</x:String>
+                    <x:String>比特币 / Bitcoin</x:String>
+                </x:Array>
+            </Picker.ItemsSource>
+        </Picker>
+
+        <Label 
+            Text="钱包名称 / Wallet Name"
+            FontSize="20"
+            HorizontalOptions="Center" />
+
+        <Entry 
+            x:Name="WalletNameEntry"
+            Placeholder="输入钱包名称 / Enter wallet name"
+            HorizontalOptions="Fill" />
+
+        <Label 
+            Text="设置密码 / Set Password"
+            FontSize="20"
+            HorizontalOptions="Center" />
+
+        <Entry 
+            x:Name="PasswordEntry"
+            Placeholder="输入密码 / Enter password"
+            IsPassword="True"
+            HorizontalOptions="Fill" />
+
+        <Entry 
+            x:Name="ConfirmPasswordEntry"
+            Placeholder="确认密码 / Confirm password"
+            IsPassword="True"
+            HorizontalOptions="Fill" />
+
+        <Button 
+            x:Name="CreateWalletButton"
+            Text="创建钱包 / Create Wallet"
+            Clicked="OnCreateWalletClicked"
+            HorizontalOptions="Center" />
+
+        <ActivityIndicator 
+            x:Name="LoadingIndicator"
+            IsRunning="False"
+            IsVisible="False"
+            HorizontalOptions="Center" />
+
+    </VerticalStackLayout>
+</ContentPage>

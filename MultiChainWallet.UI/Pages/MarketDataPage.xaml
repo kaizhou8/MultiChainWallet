@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MultiChainWallet.UI.Pages.MarketDataPage"
+             Title="市场数据 / Market Data">
+
+    <Grid RowDefinitions="Auto,*">
+        <!-- 搜索栏和刷新按钮 / Search Bar and Refresh Button -->
+        <StackLayout Grid.Row="0" Orientation="Horizontal" Padding="10" Spacing="10">
+            <SearchBar x:Name="SearchBar" 
+                       Placeholder="搜索加密货币... / Search cryptocurrencies..." 
+                       HorizontalOptions="FillAndExpand"
+                       SearchCommand="{Binding SearchCommand}"
+                       SearchCommandParameter="{Binding Text, Source={x:Reference SearchBar}}" />
+            <Button Text="刷新 / Refresh" 
+                    Command="{Binding RefreshCommand}"
+                    WidthRequest="100" />
+        </StackLayout>
+
+        <!-- 加密货币列表 / Cryptocurrency List -->
+        <RefreshView Grid.Row="1" 
+                     Command="{Binding RefreshCommand}" 
+                     IsRefreshing="{Binding IsRefreshing}">
+            <CollectionView x:Name="CryptoListView"
+                          ItemsSource="{Binding CryptoPrices}"
+                          SelectionMode="Single"
+                          SelectionChanged="OnCryptoSelected"
+                          Margin="10">
+                <CollectionView.EmptyView>
+                    <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
+                        <Label Text="没有价格数据 / No price data available" 
+                               FontSize="18" 
+                               HorizontalTextAlignment="Center" />
+                        <Button Text="刷新 / Refresh" 
+                                Command="{Binding RefreshCommand}"
+                                HorizontalOptions="Center" 
+                                Margin="0,20,0,0" />
+                    </StackLayout>
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Margin="5" Padding="10" BorderColor="LightGray">
+                            <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
+                                <!-- 加密货币图标 / Crypto Icon -->
+                                <Image Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
+                                       Source="{Binding ImageUrl}"
+                                       WidthRequest="40"
+                                       HeightRequest="40"
+                                       VerticalOptions="Center"
+                                       Margin="0,0,10,0"/>
+                                
+                                <!-- 加密货币名称和代码 / Crypto Name and Symbol -->
+                                <StackLayout Grid.Row="0" Grid.Column="1">
+                                    <Label Text="{Binding Name}" FontSize="18" FontAttributes="Bold" />
+                                    <Label Text="{Binding Symbol}" FontSize="14" TextColor="Gray" />
+                                </StackLayout>
+                                
+                                <!-- 价格信息 / Price Information -->
+                                <StackLayout Grid.Row="0" Grid.Column="2" HorizontalOptions="End">
+                                    <Label Text="{Binding CurrentPrice, StringFormat='${0:N2}'}" 
+                                           FontSize="18" 
+                                           FontAttributes="Bold" 
+                                           HorizontalTextAlignment="End" />
+                                    <Label Text="{Binding PriceChangePercentage24h, StringFormat='{0:N2}%'}" 
+                                           TextColor="{Binding PriceChangeColor}"
+                                           FontSize="14" 
+                                           HorizontalTextAlignment="End" />
+                                </StackLayout>
+                                
+                                <!-- 市值和交易量 / Market Cap and Volume -->
+                                <StackLayout Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" 
+                                             Orientation="Horizontal" Spacing="10">
+                                    <Label Text="{Binding MarketCap, StringFormat='市值 / Market Cap: ${0:N0}'}" 
+                                           FontSize="12" TextColor="Gray" />
+                                    <Label Text="{Binding Volume24h, StringFormat='24h成交量 / Volume: ${0:N0}'}" 
+                                           FontSize="12" TextColor="Gray" />
+                                </StackLayout>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+    </Grid>
+</ContentPage> 

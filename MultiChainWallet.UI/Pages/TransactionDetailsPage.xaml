@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MultiChainWallet.UI.Pages.TransactionDetailsPage"
+             Title="交易详情 / Transaction Details">
+    <ScrollView>
+        <VerticalStackLayout Spacing="25" Padding="30,0">
+            <Label Text="交易哈希 / Transaction Hash" FontAttributes="Bold" />
+            <Label x:Name="TransactionHashLabel" />
+
+            <Label Text="发送地址 / From Address" FontAttributes="Bold" />
+            <Label x:Name="FromAddressLabel" />
+
+            <Label Text="接收地址 / To Address" FontAttributes="Bold" />
+            <Label x:Name="ToAddressLabel" />
+
+            <Label Text="金额 / Amount" FontAttributes="Bold" />
+            <Label x:Name="AmountLabel" />
+
+            <Label Text="状态 / Status" FontAttributes="Bold" />
+            <Label x:Name="StatusLabel" />
+
+            <Label Text="时间 / Time" FontAttributes="Bold" />
+            <Label x:Name="TimestampLabel" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

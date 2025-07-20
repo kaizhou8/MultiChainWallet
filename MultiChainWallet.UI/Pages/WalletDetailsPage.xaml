@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MultiChainWallet.UI.Pages.WalletDetailsPage"
+             Title="钱包详情 / Wallet Details">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            <!-- 基本信息 / Basic Information -->
+            <Frame Padding="15" Margin="0,0,0,10">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="基本信息 / Basic Information"
+                           FontSize="20"
+                           FontAttributes="Bold"/>
+                    
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="10">
+                        <Label Text="名称 / Name:"
+                               Grid.Row="0" Grid.Column="0"
+                               VerticalOptions="Center"/>
+                        <Label x:Name="NameLabel"
+                               Grid.Row="0" Grid.Column="1"
+                               VerticalOptions="Center"
+                               Margin="10,0,0,0"/>
+                        
+                        <Label Text="地址 / Address:"
+                               Grid.Row="1" Grid.Column="0"
+                               VerticalOptions="Center"/>
+                        <HorizontalStackLayout Grid.Row="1" Grid.Column="1">
+                            <Label x:Name="AddressLabel"
+                                   VerticalOptions="Center"
+                                   Margin="10,0,0,0"/>
+                            <Button Text="复制 / Copy"
+                                    Clicked="OnCopyAddressClicked"
+                                    VerticalOptions="Center"
+                                    Margin="10,0,0,0"
+                                    HeightRequest="30"
+                                    FontSize="12"/>
+                        </HorizontalStackLayout>
+                        
+                        <Label Text="链类型 / Chain Type:"
+                               Grid.Row="2" Grid.Column="0"
+                               VerticalOptions="Center"/>
+                        <Label x:Name="ChainTypeLabel"
+                               Grid.Row="2" Grid.Column="1"
+                               VerticalOptions="Center"
+                               Margin="10,0,0,0"/>
+                        
+                        <Label Text="余额 / Balance:"
+                               Grid.Row="3" Grid.Column="0"
+                               VerticalOptions="Center"/>
+                        <Label x:Name="BalanceLabel"
+                               Grid.Row="3" Grid.Column="1"
+                               VerticalOptions="Center"
+                               Margin="10,0,0,0"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+            
+            <!-- 组和标签 / Group and Tags -->
+            <Frame Padding="15" Margin="0,0,0,10">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="组和标签 / Group and Tags"
+                           FontSize="20"
+                           FontAttributes="Bold"/>
+                    
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" RowSpacing="15">
+                        <Label Text="组 / Group:"
+                               Grid.Row="0" Grid.Column="0"
+                               VerticalOptions="Center"/>
+                        <HorizontalStackLayout Grid.Row="0" Grid.Column="1">
+                            <Entry x:Name="GroupEntry"
+                                   VerticalOptions="Center"
+                                   Margin="10,0,0,0"
+                                   HorizontalOptions="FillAndExpand"/>
+                            <Button Text="更新 / Update"
+                                    Clicked="OnUpdateGroupClicked"
+                                    VerticalOptions="Center"
+                                    Margin="10,0,0,0"/>
+                        </HorizontalStackLayout>
+                        
+                        <Label Text="标签 / Tags:"
+                               Grid.Row="1" Grid.Column="0"
+                               VerticalOptions="Center"/>
+                        <HorizontalStackLayout Grid.Row="1" Grid.Column="1">
+                            <Entry x:Name="TagsEntry"
+                                   Placeholder="用逗号分隔多个标签 / Separate tags with commas"
+                                   VerticalOptions="Center"
+                                   Margin="10,0,0,0"
+                                   HorizontalOptions="FillAndExpand"/>
+                            <Button Text="更新 / Update"
+                                    Clicked="OnUpdateTagsClicked"
+                                    VerticalOptions="Center"
+                                    Margin="10,0,0,0"/>
+                        </HorizontalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+            
+            <!-- 使用统计 / Usage Statistics -->
+            <Frame Padding="15" Margin="0,0,0,10">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="使用统计 / Usage Statistics"
+                           FontSize="20"
+                           FontAttributes="Bold"/>
+                    
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto" RowSpacing="10">
+                        <Label Text="创建时间 / Created At:"
+                               Grid.Row="0" Grid.Column="0"
+                               VerticalOptions="Center"/>
+                        <Label x:Name="CreatedAtLabel"
+                               Grid.Row="0" Grid.Column="1"
+                               VerticalOptions="Center"
+                               Margin="10,0,0,0"/>
+                        
+                        <Label Text="最后使用 / Last Used:"
+                               Grid.Row="1" Grid.Column="0"
+                               VerticalOptions="Center"/>
+                        <Label x:Name="LastUsedLabel"
+                               Grid.Row="1" Grid.Column="1"
+                               VerticalOptions="Center"
+                               Margin="10,0,0,0"/>
+                        
+                        <Label Text="使用次数 / Usage Count:"
+                               Grid.Row="2" Grid.Column="0"
+                               VerticalOptions="Center"/>
+                        <Label x:Name="UsageCountLabel"
+                               Grid.Row="2" Grid.Column="1"
+                               VerticalOptions="Center"
+                               Margin="10,0,0,0"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+            
+            <!-- 操作按钮 / Action Buttons -->
+            <VerticalStackLayout Spacing="10">
+                <Button Text="发送交易 / Send Transaction"
+                        Clicked="OnSendTransactionClicked"/>
+                <Button Text="刷新 / Refresh"
+                        Clicked="OnRefreshClicked"/>
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

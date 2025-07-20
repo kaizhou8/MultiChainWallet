@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            x:Class="MultiChainWallet.UI.Pages.TokenListPage"
+            Title="Token List">
+
+    <Grid Padding="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackLayout Grid.Row="0" Margin="0,0,0,20">
+            <Label Text="ERC20 Tokens" 
+                   FontSize="24" 
+                   FontAttributes="Bold"
+                   Margin="0,0,0,10"/>
+            <Button Text="Add New Token" 
+                    WidthRequest="150" 
+                    HorizontalOptions="Start"
+                    Clicked="AddToken_Click"/>
+        </StackLayout>
+
+        <!-- Token List -->
+        <CollectionView Grid.Row="1" 
+                       x:Name="TokenListView"
+                       SelectionMode="Single"
+                       SelectionChanged="TokenListView_SelectionChanged">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="200"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Token Info -->
+                        <StackLayout Grid.Column="0">
+                            <Label Text="{Binding Symbol}" 
+                                   FontAttributes="Bold"/>
+                            <Label Text="{Binding Name}" 
+                                   FontSize="12" 
+                                   Opacity="0.7"/>
+                        </StackLayout>
+
+                        <!-- Balance -->
+                        <Label Grid.Column="1">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding Balance, StringFormat='{0:N4}'}" />
+                                    <Span Text=" " />
+                                    <Span Text="{Binding Symbol}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+
+                        <!-- Value -->
+                        <Label Grid.Column="2">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="$" />
+                                    <Span Text="{Binding Value, StringFormat='{0:N2}'}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+
+                        <!-- Actions -->
+                        <HorizontalStackLayout Grid.Column="3">
+                            <Button Text="Send" 
+                                    Margin="0,0,10,0"
+                                    Clicked="SendToken_Click"/>
+                            <Button Text="Details"
+                                    Clicked="ViewDetails_Click"/>
+                        </HorizontalStackLayout>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

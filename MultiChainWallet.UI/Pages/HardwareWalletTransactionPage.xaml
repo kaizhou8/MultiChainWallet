@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MultiChainWallet.UI.Pages.HardwareWalletTransactionPage"
+             Title="硬件钱包交易 / Hardware Wallet Transaction">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20">
+            
+            <!-- 步骤指示器 / Step Indicator -->
+            <Grid ColumnDefinitions="Auto,*,Auto,*,Auto" RowDefinitions="Auto,Auto" Margin="0,0,0,20">
+                <!-- 步骤1 / Step 1 -->
+                <Frame x:Name="Step1Frame" Grid.Column="0" Grid.Row="0" 
+                       BackgroundColor="{StaticResource Primary}" 
+                       Padding="10" CornerRadius="20" HeightRequest="40" WidthRequest="40"
+                       HorizontalOptions="Center" VerticalOptions="Center">
+                    <Label Text="1" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" FontSize="16" FontAttributes="Bold"/>
+                </Frame>
+                <Label Text="准备交易 / Prepare Transaction" Grid.Column="0" Grid.Row="1" 
+                       HorizontalOptions="Center" FontSize="12" Margin="0,5,0,0"/>
+                
+                <!-- 连接线1 / Connection Line 1 -->
+                <Line x:Name="Line1" Grid.Column="1" Grid.Row="0" 
+                      X1="0" Y1="20" X2="1" Y2="20" 
+                      Stroke="{StaticResource Secondary}" StrokeThickness="2" 
+                      HorizontalOptions="Fill" VerticalOptions="Center"/>
+                
+                <!-- 步骤2 / Step 2 -->
+                <Frame x:Name="Step2Frame" Grid.Column="2" Grid.Row="0" 
+                       BackgroundColor="{StaticResource Surface}" 
+                       Padding="10" CornerRadius="20" HeightRequest="40" WidthRequest="40"
+                       HorizontalOptions="Center" VerticalOptions="Center">
+                    <Label Text="2" TextColor="{StaticResource TextSecondary}" HorizontalOptions="Center" VerticalOptions="Center" FontSize="16" FontAttributes="Bold"/>
+                </Frame>
+                <Label Text="签名交易 / Sign Transaction" Grid.Column="2" Grid.Row="1" 
+                       HorizontalOptions="Center" FontSize="12" Margin="0,5,0,0"/>
+                
+                <!-- 连接线2 / Connection Line 2 -->
+                <Line x:Name="Line2" Grid.Column="3" Grid.Row="0" 
+                      X1="0" Y1="20" X2="1" Y2="20" 
+                      Stroke="{StaticResource Surface}" StrokeThickness="2" 
+                      HorizontalOptions="Fill" VerticalOptions="Center"/>
+                
+                <!-- 步骤3 / Step 3 -->
+                <Frame x:Name="Step3Frame" Grid.Column="4" Grid.Row="0" 
+                       BackgroundColor="{StaticResource Surface}" 
+                       Padding="10" CornerRadius="20" HeightRequest="40" WidthRequest="40"
+                       HorizontalOptions="Center" VerticalOptions="Center">
+                    <Label Text="3" TextColor="{StaticResource TextSecondary}" HorizontalOptions="Center" VerticalOptions="Center" FontSize="16" FontAttributes="Bold"/>
+                </Frame>
+                <Label Text="广播结果 / Broadcast Result" Grid.Column="4" Grid.Row="1" 
+                       HorizontalOptions="Center" FontSize="12" Margin="0,5,0,0"/>
+            </Grid>
+            
+            <!-- 步骤1：准备交易 / Step 1: Prepare Transaction -->
+            <Frame x:Name="Step1Frame_Content" IsVisible="true" BorderColor="{StaticResource Primary}" Padding="15" Margin="0,10,0,0">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="准备交易 / Prepare Transaction" FontSize="18" FontAttributes="Bold" TextColor="{StaticResource Primary}"/>
+                    
+                    <!-- 连接状态 / Connection Status -->
+                    <Frame BorderColor="{StaticResource Secondary}" Padding="10" BackgroundColor="{StaticResource SurfaceVariant}">
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="连接状态 / Connection Status" FontAttributes="Bold"/>
+                            <Label x:Name="ConnectionStatusLabel" Text="未连接 / Not Connected" TextColor="Red"/>
+                            <Button x:Name="ConnectWalletButton" Text="连接硬件钱包 / Connect Hardware Wallet" 
+                                    Clicked="ConnectWalletButton_Clicked" HorizontalOptions="Start"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                    
+                    <!-- 交易详情 / Transaction Details -->
+                    <Frame BorderColor="{StaticResource Secondary}" Padding="10" BackgroundColor="{StaticResource SurfaceVariant}">
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="交易详情 / Transaction Details" FontAttributes="Bold"/>
+                            
+                            <!-- 币种选择 / Coin Type Selection -->
+                            <HorizontalStackLayout Spacing="10">
+                                <Label Text="选择币种 / Select Coin Type:" VerticalOptions="Center" WidthRequest="150"/>
+                                <Picker x:Name="CoinTypePicker" SelectedIndexChanged="CoinTypePicker_SelectedIndexChanged" WidthRequest="200">
+                                    <Picker.Items>
+                                        <x:String>以太坊 / Ethereum</x:String>
+                                        <x:String>比特币 / Bitcoin</x:String>
+                                    </Picker.Items>
+                                </Picker>
+                            </HorizontalStackLayout>
+                            
+                            <!-- 以太坊交易表单 / Ethereum Transaction Form -->
+                            <VerticalStackLayout x:Name="EthereumTransactionForm" Spacing="10" IsVisible="true">
+                                <Label Text="以太坊交易 / Ethereum Transaction" FontAttributes="Bold" Margin="0,10,0,0"/>
+                                
+                                <Grid ColumnDefinitions="150,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="15" ColumnSpacing="10">
+                                    <Label Text="发送地址 / From:" Grid.Row="0" Grid.Column="0" VerticalOptions="Center"/>
+                                    <Entry x:Name="EthFromAddressEntry" Placeholder="0x..." Grid.Row="0" Grid.Column="1"/>
+                                    
+                                    <Label Text="接收地址 / To:" Grid.Row="1" Grid.Column="0" VerticalOptions="Center"/>
+                                    <Entry x:Name="EthToAddressEntry" Placeholder="0x..." Grid.Row="1" Grid.Column="1"/>
+                                    
+                                    <Label Text="金额 (ETH) / Amount:" Grid.Row="2" Grid.Column="0" VerticalOptions="Center"/>
+                                    <Entry x:Name="EthAmountEntry" Placeholder="0.01" Keyboard="Numeric" Grid.Row="2" Grid.Column="1"/>
+                                    
+                                    <Label Text="Gas价格 (Gwei) / Gas Price:" Grid.Row="3" Grid.Column="0" VerticalOptions="Center"/>
+                                    <Entry x:Name="EthGasPriceEntry" Placeholder="20" Keyboard="Numeric" Grid.Row="3" Grid.Column="1"/>
+                                    
+                                    <Label Text="数据 (可选) / Data (Optional):" Grid.Row="4" Grid.Column="0" VerticalOptions="Center"/>
+                                    <Entry x:Name="EthDataEntry" Placeholder="0x..." Grid.Row="4" Grid.Column="1"/>
+                                </Grid>
+                                
+                                <HorizontalStackLayout Spacing="10" Margin="0,10,0,0">
+                                    <Button x:Name="LoadMyAddressButton" Text="加载我的地址 / Load My Address" 
+                                            Clicked="LoadMyAddressButton_Clicked" HorizontalOptions="Start"/>
+                                    <Button x:Name="EstimateGasButton" Text="估算Gas / Estimate Gas" 
+                                            Clicked="EstimateGasButton_Clicked" HorizontalOptions="Start"/>
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                            
+                            <!-- 比特币交易表单 / Bitcoin Transaction Form -->
+                            <VerticalStackLayout x:Name="BitcoinTransactionForm" Spacing="10" IsVisible="false">
+                                <Label Text="比特币交易 / Bitcoin Transaction" FontAttributes="Bold" Margin="0,10,0,0"/>
+                                
+                                <Grid ColumnDefinitions="150,*" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="15" ColumnSpacing="10">
+                                    <Label Text="发送地址 / From:" Grid.Row="0" Grid.Column="0" VerticalOptions="Center"/>
+                                    <Entry x:Name="BtcFromAddressEntry" Placeholder="bc1..." Grid.Row="0" Grid.Column="1"/>
+                                    
+                                    <Label Text="接收地址 / To:" Grid.Row="1" Grid.Column="0" VerticalOptions="Center"/>
+                                    <Entry x:Name="BtcToAddressEntry" Placeholder="bc1..." Grid.Row="1" Grid.Column="1"/>
+                                    
+                                    <Label Text="金额 (BTC) / Amount:" Grid.Row="2" Grid.Column="0" VerticalOptions="Center"/>
+                                    <Entry x:Name="BtcAmountEntry" Placeholder="0.001" Keyboard="Numeric" Grid.Row="2" Grid.Column="1"/>
+                                    
+                                    <Label Text="费率 (sat/vB) / Fee Rate:" Grid.Row="3" Grid.Column="0" VerticalOptions="Center"/>
+                                    <Entry x:Name="BtcFeeRateEntry" Placeholder="5" Keyboard="Numeric" Grid.Row="3" Grid.Column="1"/>
+                                </Grid>
+                                
+                                <HorizontalStackLayout Spacing="10" Margin="0,10,0,0">
+                                    <Button x:Name="LoadMyBtcAddressButton" Text="加载我的地址 / Load My Address" 
+                                            Clicked="LoadMyBtcAddressButton_Clicked" HorizontalOptions="Start"/>
+                                    <Button x:Name="GetRecommendedFeeButton" Text="获取推荐费率 / Get Recommended Fee" 
+                                            Clicked="GetRecommendedFeeButton_Clicked" HorizontalOptions="Start"/>
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </Frame>
+                    
+                    <!-- 构建交易按钮 / Build Transaction Button -->
+                    <Button x:Name="BuildTransactionButton" Text="构建交易 / Build Transaction" 
+                            Clicked="BuildTransactionButton_Clicked" HorizontalOptions="Center"/>
+                    
+                    <!-- 导航按钮 / Navigation Buttons -->
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="20">
+                        <Button x:Name="NextToStep2Button" Text="下一步 / Next" 
+                                Clicked="NextToStep2Button_Clicked" IsEnabled="false"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+            
+            <!-- 步骤2：签名交易 / Step 2: Sign Transaction -->
+            <Frame x:Name="Step2Frame_Content" IsVisible="false" BorderColor="{StaticResource Primary}" Padding="15" Margin="0,10,0,0">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="签名交易 / Sign Transaction" FontSize="18" FontAttributes="Bold" TextColor="{StaticResource Primary}"/>
+                    
+                    <!-- 交易摘要 / Transaction Summary -->
+                    <Frame BorderColor="{StaticResource Secondary}" Padding="10" BackgroundColor="{StaticResource SurfaceVariant}">
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="交易摘要 / Transaction Summary" FontAttributes="Bold"/>
+                            <Label x:Name="TransactionTypeLabel" Text="交易类型: / Transaction Type:"/>
+                            <Label x:Name="FromAddressLabel" Text="发送地址: / From:"/>
+                            <Label x:Name="ToAddressLabel" Text="接收地址: / To:"/>
+                            <Label x:Name="AmountLabel" Text="金额: / Amount:"/>
+                            <Label x:Name="FeeLabel" Text="费用: / Fee:"/>
+                            <Label x:Name="TotalLabel" Text="总计: / Total:"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                    
+                    <!-- 签名提示 / Signing Prompt -->
+                    <Frame BorderColor="{StaticResource Secondary}" Padding="10" BackgroundColor="{StaticResource SurfaceVariant}">
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="请在硬件钱包上确认交易详情 / Please confirm transaction details on your hardware wallet" 
+                                   FontAttributes="Bold" TextColor="{StaticResource Primary}"/>
+                            <Image Source="confirm_transaction.png" HeightRequest="150" HorizontalOptions="Center"/>
+                            <Label Text="请仔细检查交易详情，确保与上方显示的信息一致 / Please carefully check the transaction details and ensure they match the information shown above" 
+                                   TextColor="{StaticResource TextSecondary}" FontSize="14"/>
+                            
+                            <ActivityIndicator x:Name="SigningIndicator" IsRunning="false" IsVisible="false"/>
+                            <Label x:Name="SigningStatusLabel" IsVisible="false"/>
+                            
+                            <Button x:Name="SignTransactionButton" Text="签名交易 / Sign Transaction" 
+                                    Clicked="SignTransactionButton_Clicked" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                    
+                    <!-- 导航按钮 / Navigation Buttons -->
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="20">
+                        <Button x:Name="BackToStep1Button" Text="返回 / Back" 
+                                Clicked="BackToStep1Button_Clicked"/>
+                        <Button x:Name="NextToStep3Button" Text="下一步 / Next" 
+                                Clicked="NextToStep3Button_Clicked" IsEnabled="false"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+            
+            <!-- 步骤3：广播结果 / Step 3: Broadcast Result -->
+            <Frame x:Name="Step3Frame_Content" IsVisible="false" BorderColor="{StaticResource Primary}" Padding="15" Margin="0,10,0,0">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="广播交易 / Broadcast Transaction" FontSize="18" FontAttributes="Bold" TextColor="{StaticResource Primary}"/>
+                    
+                    <!-- 广播提示 / Broadcast Prompt -->
+                    <Frame BorderColor="{StaticResource Secondary}" Padding="10" BackgroundColor="{StaticResource SurfaceVariant}">
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="交易已签名，准备广播到网络 / Transaction is signed and ready to broadcast to the network" 
+                                   FontAttributes="Bold"/>
+                            <Label Text="广播后交易将无法撤销，请确认您要继续 / Once broadcast, the transaction cannot be reversed. Please confirm you want to proceed" 
+                                   TextColor="{StaticResource TextSecondary}" FontSize="14"/>
+                            
+                            <ActivityIndicator x:Name="BroadcastingIndicator" IsRunning="false" IsVisible="false"/>
+                            <Label x:Name="BroadcastingStatusLabel" IsVisible="false"/>
+                            
+                            <Button x:Name="BroadcastTransactionButton" Text="广播交易 / Broadcast Transaction" 
+                                    Clicked="BroadcastTransactionButton_Clicked" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                    
+                    <!-- 交易结果 / Transaction Result -->
+                    <Frame x:Name="ResultFrame" BorderColor="{StaticResource Secondary}" Padding="10" BackgroundColor="{StaticResource SurfaceVariant}" IsVisible="false">
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="交易结果 / Transaction Result" FontAttributes="Bold"/>
+                            <Label x:Name="TransactionStatusLabel" Text="状态: / Status:"/>
+                            <Label x:Name="TransactionIdLabel" Text="交易ID: / Transaction ID:"/>
+                            <Button x:Name="ViewTransactionButton" Text="查看交易 / View Transaction" 
+                                    Clicked="ViewTransactionButton_Clicked" HorizontalOptions="Start"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                    
+                    <!-- 导航按钮 / Navigation Buttons -->
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="20">
+                        <Button x:Name="BackToStep2Button" Text="返回 / Back" 
+                                Clicked="BackToStep2Button_Clicked"/>
+                        <Button x:Name="NewTransactionButton" Text="新交易 / New Transaction" 
+                                Clicked="NewTransactionButton_Clicked"/>
+                        <Button x:Name="FinishButton" Text="完成 / Finish" 
+                                Clicked="FinishButton_Clicked"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage> 

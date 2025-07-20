@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MultiChainWallet.UI.Pages.CryptoDetailsPage"
+             Title="{Binding Name}">
+
+    <RefreshView Command="{Binding RefreshCommand}" IsRefreshing="{Binding IsRefreshing}">
+        <ScrollView>
+            <StackLayout Padding="20">
+                <!-- 加载指示器 / Loading Indicator -->
+                <ActivityIndicator IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" 
+                                   HorizontalOptions="Center" VerticalOptions="Center" />
+
+                <!-- 错误消息 / Error Message -->
+                <StackLayout IsVisible="{Binding HasError}" Padding="20">
+                    <Label Text="{Binding ErrorMessage}" TextColor="Red" 
+                           HorizontalOptions="Center" FontSize="16" />
+                    <Button Text="重试 / Retry" Command="{Binding RefreshCommand}" 
+                            HorizontalOptions="Center" Margin="0,10,0,0" />
+                </StackLayout>
+
+                <!-- 加密货币详情 / Crypto Details -->
+                <StackLayout IsVisible="{Binding IsDataLoaded}">
+                    <!-- 标题和图标 / Title and Icon -->
+                    <Grid ColumnDefinitions="Auto,*" Margin="0,0,0,20">
+                        <Image Grid.Column="0" Source="{Binding ImageUrl}" 
+                               HeightRequest="60" WidthRequest="60" 
+                               VerticalOptions="Center" Margin="0,0,15,0" />
+                        <StackLayout Grid.Column="1" VerticalOptions="Center">
+                            <Label Text="{Binding Name}" FontSize="24" FontAttributes="Bold" />
+                            <Label Text="{Binding Symbol}" FontSize="18" TextColor="Gray" />
+                        </StackLayout>
+                    </Grid>
+
+                    <!-- 当前价格和变化 / Current Price and Change -->
+                    <Frame BorderColor="LightGray" Padding="15" Margin="0,0,0,20">
+                        <StackLayout>
+                            <Label Text="当前价格 / Current Price" FontSize="16" Margin="0,0,0,10" />
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Grid.Column="0" Text="{Binding CurrentPrice, StringFormat='${0:N2}'}" 
+                                       FontSize="28" FontAttributes="Bold" />
+                                <Label Grid.Column="1" Text="{Binding PriceChangePercentage24h, StringFormat='{0:N2}%'}" 
+                                       TextColor="{Binding PriceChangeColor}" FontSize="20" VerticalOptions="Center" />
+                            </Grid>
+                            <Label Text="24小时变化 / 24h Change" FontSize="14" TextColor="Gray" Margin="0,5,0,0" />
+                            <Label Text="{Binding PriceChange24h, StringFormat='${0:N2}'}" TextColor="{Binding PriceChangeColor}" 
+                                   FontSize="16" />
+                        </StackLayout>
+                    </Frame>
+
+                    <!-- 市场数据 / Market Data -->
+                    <Frame BorderColor="LightGray" Padding="15" Margin="0,0,0,20">
+                        <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,*">
+                            <!-- 市值 / Market Cap -->
+                            <Label Grid.Row="0" Grid.Column="0" Text="市值 / Market Cap" 
+                                   FontSize="16" Margin="0,0,0,5" />
+                            <Label Grid.Row="1" Grid.Column="0" Text="{Binding MarketCap, StringFormat='${0:N0}'}" 
+                                   FontSize="16" FontAttributes="Bold" Margin="0,0,0,15" />
+
+                            <!-- 交易量 / Volume -->
+                            <Label Grid.Row="0" Grid.Column="1" Text="24h成交量 / Volume" 
+                                   FontSize="16" Margin="0,0,0,5" />
+                            <Label Grid.Row="1" Grid.Column="1" Text="{Binding Volume24h, StringFormat='${0:N0}'}" 
+                                   FontSize="16" FontAttributes="Bold" Margin="0,0,0,15" />
+
+                            <!-- 最高价 / All Time High -->
+                            <Label Grid.Row="2" Grid.Column="0" Text="历史最高价 / ATH" 
+                                   FontSize="16" Margin="0,0,0,5" />
+                            <Label Grid.Row="3" Grid.Column="0" Text="{Binding AllTimeHigh, StringFormat='${0:N2}'}" 
+                                   FontSize="16" FontAttributes="Bold" />
+
+                            <!-- 最低价 / All Time Low -->
+                            <Label Grid.Row="2" Grid.Column="1" Text="历史最低价 / ATL" 
+                                   FontSize="16" Margin="0,0,0,5" />
+                            <Label Grid.Row="3" Grid.Column="1" Text="{Binding AllTimeLow, StringFormat='${0:N2}'}" 
+                                   FontSize="16" FontAttributes="Bold" />
+                        </Grid>
+                    </Frame>
+
+                    <!-- 价格范围 / Price Range -->
+                    <Frame BorderColor="LightGray" Padding="15" Margin="0,0,0,20">
+                        <StackLayout>
+                            <Label Text="24小时价格范围 / 24h Price Range" FontSize="16" Margin="0,0,0,10" />
+                            <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
+                                <Label Grid.Row="0" Grid.Column="0" Text="{Binding Low24h, StringFormat='${0:N2}'}" 
+                                       FontSize="16" TextColor="Gray" />
+                                <Label Grid.Row="0" Grid.Column="2" Text="{Binding High24h, StringFormat='${0:N2}'}" 
+                                       FontSize="16" TextColor="Gray" />
+                                
+                                <!-- 进度条 / Progress Bar -->
+                                <StackLayout Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" 
+                                             Orientation="Horizontal" HeightRequest="10" Margin="0,5,0,0">
+                                    <Rectangle Fill="#E0E0E0" WidthRequest="{Binding PriceRangeWidth}" 
+                                               HeightRequest="10" />
+                                    <Rectangle Fill="#512BD4" WidthRequest="10" HeightRequest="10" />
+                                    <Rectangle Fill="#E0E0E0" HorizontalOptions="FillAndExpand" 
+                                               HeightRequest="10" />
+                                </StackLayout>
+                            </Grid>
+                        </StackLayout>
+                    </Frame>
+
+                    <!-- 描述 / Description -->
+                    <Frame BorderColor="LightGray" Padding="15" Margin="0,0,0,20" IsVisible="{Binding HasDescription}">
+                        <StackLayout>
+                            <Label Text="描述 / Description" FontSize="16" Margin="0,0,0,10" />
+                            <Label Text="{Binding Description}" FontSize="14" />
+                        </StackLayout>
+                    </Frame>
+
+                    <!-- 其他信息 / Other Information -->
+                    <Frame BorderColor="LightGray" Padding="15" Margin="0,0,0,20">
+                        <StackLayout>
+                            <Label Text="其他信息 / Other Information" FontSize="16" Margin="0,0,0,10" />
+                            <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+                                <Label Grid.Row="0" Grid.Column="0" Text="流通量 / Circulating Supply:" 
+                                       FontSize="14" Margin="0,0,10,5" />
+                                <Label Grid.Row="0" Grid.Column="1" Text="{Binding CirculatingSupply, StringFormat='{0:N0}'}" 
+                                       FontSize="14" />
+
+                                <Label Grid.Row="1" Grid.Column="0" Text="总供应量 / Total Supply:" 
+                                       FontSize="14" Margin="0,0,10,5" />
+                                <Label Grid.Row="1" Grid.Column="1" Text="{Binding TotalSupply, StringFormat='{0:N0}'}" 
+                                       FontSize="14" />
+
+                                <Label Grid.Row="2" Grid.Column="0" Text="最大供应量 / Max Supply:" 
+                                       FontSize="14" Margin="0,0,10,5" />
+                                <Label Grid.Row="2" Grid.Column="1" Text="{Binding MaxSupply, StringFormat='{0:N0}'}" 
+                                       FontSize="14" />
+
+                                <Label Grid.Row="3" Grid.Column="0" Text="区块链 / Blockchain:" 
+                                       FontSize="14" Margin="0,0,10,5" />
+                                <Label Grid.Row="3" Grid.Column="1" Text="{Binding Blockchain}" 
+                                       FontSize="14" />
+                            </Grid>
+                        </StackLayout>
+                    </Frame>
+
+                    <!-- 链接 / Links -->
+                    <Frame BorderColor="LightGray" Padding="15" Margin="0,0,0,20" IsVisible="{Binding HasLinks}">
+                        <StackLayout>
+                            <Label Text="链接 / Links" FontSize="16" Margin="0,0,0,10" />
+                            <FlexLayout Direction="Row" Wrap="Wrap" JustifyContent="Start" AlignItems="Center">
+                                <Button Text="网站 / Website" Command="{Binding OpenWebsiteCommand}" 
+                                        IsVisible="{Binding HasWebsite}" Margin="5" />
+                                <Button Text="白皮书 / Whitepaper" Command="{Binding OpenWhitepaperCommand}" 
+                                        IsVisible="{Binding HasWhitepaper}" Margin="5" />
+                                <Button Text="GitHub" Command="{Binding OpenGithubCommand}" 
+                                        IsVisible="{Binding HasGithub}" Margin="5" />
+                                <Button Text="Twitter" Command="{Binding OpenTwitterCommand}" 
+                                        IsVisible="{Binding HasTwitter}" Margin="5" />
+                            </FlexLayout>
+                        </StackLayout>
+                    </Frame>
+
+                    <!-- 上次更新时间 / Last Updated -->
+                    <Label Text="{Binding LastUpdated, StringFormat='上次更新 / Last Updated: {0}'}" 
+                           TextColor="Gray" FontSize="12" HorizontalOptions="Center" Margin="0,0,0,20" />
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+    </RefreshView>
+
+</ContentPage> 

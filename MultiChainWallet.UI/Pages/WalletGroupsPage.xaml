@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MultiChainWallet.UI.Pages.WalletGroupsPage"
+             Title="钱包组管理 / Wallet Groups">
+
+    <Grid RowDefinitions="Auto,*,Auto" Padding="20">
+        <!-- 搜索和添加组 / Search and Add Group -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,10">
+            <Entry x:Name="GroupNameEntry" 
+                   Placeholder="输入组名... / Enter group name..." 
+                   Grid.Column="0"/>
+            <Button Text="添加 / Add" 
+                    Grid.Column="1" 
+                    Clicked="OnAddGroupClicked"
+                    Margin="10,0,0,0"/>
+        </Grid>
+
+        <!-- 组列表 / Group List -->
+        <RefreshView Grid.Row="1" 
+                     x:Name="GroupsRefreshView"
+                     IsRefreshing="False"
+                     Command="{Binding RefreshCommand}">
+            <CollectionView x:Name="GroupsCollection">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Margin="0,5" Padding="10">
+                            <Grid ColumnDefinitions="*,Auto,Auto">
+                                <Label Grid.Column="0" 
+                                       Text="{Binding Name}" 
+                                       VerticalOptions="Center"/>
+                                <Label Grid.Column="1" 
+                                       Text="{Binding WalletCount, StringFormat='钱包数: {0} / Count: {0}'}" 
+                                       VerticalOptions="Center"
+                                       Margin="10,0"/>
+                                <Button Grid.Column="2" 
+                                        Text="查看 / View" 
+                                        Clicked="OnViewGroupClicked"
+                                        CommandParameter="{Binding Name}"/>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+
+        <!-- 底部按钮 / Bottom Buttons -->
+        <Button Grid.Row="2" 
+                Text="刷新 / Refresh" 
+                Clicked="OnRefreshClicked"
+                Margin="0,10,0,0"/>
+    </Grid>
+</ContentPage>

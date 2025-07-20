@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MultiChainWallet.UI.Pages.HardwareWalletConnectionPage"
+             Title="硬件钱包连接 / Hardware Wallet Connection"
+             BackgroundColor="{StaticResource Background}">
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20">
+            <!-- 标题 / Title -->
+            <Label 
+                Text="连接硬件钱包 / Connect Hardware Wallet"
+                FontSize="24"
+                FontFamily="OpenSansBold"
+                HorizontalOptions="Center"
+                TextColor="{StaticResource TextPrimary}" 
+                Margin="0,0,0,10"/>
+            
+            <!-- 连接状态 / Connection Status -->
+            <Frame Style="{StaticResource CardView}" Padding="15">
+                <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto">
+                    <Image Grid.Column="0" 
+                           Source="hardware_wallet_icon.png"
+                           HeightRequest="40"
+                           WidthRequest="40"
+                           Margin="0,0,15,0" />
+                    
+                    <VerticalStackLayout Grid.Column="1" Spacing="5">
+                        <Label Text="连接状态 / Connection Status" 
+                               FontSize="14"
+                               TextColor="{StaticResource TextSecondary}" />
+                        <Label x:Name="ConnectionStatusLabel"
+                               Text="未连接 / Not Connected"
+                               FontSize="16"
+                               FontFamily="OpenSansSemiBold"
+                               TextColor="Red" />
+                    </VerticalStackLayout>
+                    
+                    <ActivityIndicator x:Name="LoadingIndicator"
+                                       Grid.Column="2"
+                                       IsVisible="False"
+                                       IsRunning="False"
+                                       Color="{StaticResource Primary}"
+                                       HeightRequest="30"
+                                       WidthRequest="30" />
+                </Grid>
+            </Frame>
+            
+            <!-- 操作状态 / Status -->
+            <Label x:Name="StatusLabel"
+                   Text="请选择硬件钱包类型 / Please select a hardware wallet type"
+                   FontSize="14"
+                   TextColor="{StaticResource TextSecondary}"
+                   HorizontalOptions="Center" />
+            
+            <!-- 硬件钱包类型选择 / Hardware Wallet Type Selection -->
+            <Frame Style="{StaticResource CardView}" Padding="15">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="硬件钱包类型 / Hardware Wallet Type"
+                           FontSize="16"
+                           FontFamily="OpenSansSemiBold"
+                           TextColor="{StaticResource TextPrimary}" />
+                    
+                    <CollectionView x:Name="WalletTypeListView"
+                                   SelectionMode="Single"
+                                   SelectionChanged="WalletTypeListView_SelectionChanged">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="10" ColumnDefinitions="Auto,*,Auto">
+                                    <Image Grid.Column="0"
+                                           Source="{Binding ImageSource}"
+                                           HeightRequest="40"
+                                           WidthRequest="40"
+                                           Margin="0,0,15,0" />
+                                    
+                                    <VerticalStackLayout Grid.Column="1" Spacing="5">
+                                        <Label Text="{Binding DisplayName}"
+                                               FontSize="16"
+                                               FontFamily="OpenSansSemiBold"
+                                               TextColor="{StaticResource TextPrimary}" />
+                                        <Label Text="{Binding DetectionStatusText}"
+                                               FontSize="14"
+                                               TextColor="{Binding DetectionStatusColor}" />
+                                    </VerticalStackLayout>
+                                    
+                                    <Image Grid.Column="2"
+                                           Source="chevron_right.png"
+                                           HeightRequest="20"
+                                           WidthRequest="20"
+                                           VerticalOptions="Center" />
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                    
+                    <Button x:Name="RefreshButton"
+                            Text="刷新 / Refresh"
+                            Style="{StaticResource BaseButton}"
+                            BackgroundColor="{StaticResource Secondary}"
+                            Clicked="RefreshButton_Clicked"
+                            Margin="0,10,0,0" />
+                </VerticalStackLayout>
+            </Frame>
+            
+            <!-- 连接指南 / Connection Guide -->
+            <Frame Style="{StaticResource CardView}" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="连接指南 / Connection Guide"
+                           FontSize="16"
+                           FontFamily="OpenSansSemiBold"
+                           TextColor="{StaticResource TextPrimary}" />
+                    
+                    <Label x:Name="InstructionsLabel"
+                           Text="请选择硬件钱包类型 / Please select a hardware wallet type"
+                           FontSize="14"
+                           TextColor="{StaticResource TextSecondary}" />
+                </VerticalStackLayout>
+            </Frame>
+            
+            <!-- 连接按钮 / Connect Button -->
+            <Button x:Name="ConnectButton"
+                    Text="连接 / Connect"
+                    Style="{StaticResource BaseButton}"
+                    BackgroundColor="{StaticResource Primary}"
+                    Clicked="ConnectButton_Clicked"
+                    IsEnabled="False" />
+            
+            <!-- 断开连接按钮 / Disconnect Button -->
+            <Button x:Name="DisconnectButton"
+                    Text="断开连接 / Disconnect"
+                    Style="{StaticResource BaseButton}"
+                    BackgroundColor="{StaticResource Danger}"
+                    Clicked="DisconnectButton_Clicked"
+                    IsEnabled="False" />
+            
+            <!-- 设备信息 / Device Info -->
+            <Frame x:Name="DeviceInfoLayout"
+                   Style="{StaticResource CardView}"
+                   Padding="15"
+                   IsVisible="False">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="设备信息 / Device Information"
+                           FontSize="16"
+                           FontFamily="OpenSansSemiBold"
+                           TextColor="{StaticResource TextPrimary}" />
+                    
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="15" ColumnSpacing="15">
+                        <!-- 型号 / Model -->
+                        <Label Grid.Row="0" Grid.Column="0"
+                               Text="型号 / Model:"
+                               FontSize="14"
+                               TextColor="{StaticResource TextSecondary}" />
+                        <Label Grid.Row="0" Grid.Column="1"
+                               x:Name="ModelLabel"
+                               FontSize="14"
+                               TextColor="{StaticResource TextPrimary}" />
+                        
+                        <!-- 固件版本 / Firmware Version -->
+                        <Label Grid.Row="1" Grid.Column="0"
+                               Text="固件版本 / Firmware:"
+                               FontSize="14"
+                               TextColor="{StaticResource TextSecondary}" />
+                        <Label Grid.Row="1" Grid.Column="1"
+                               x:Name="FirmwareLabel"
+                               FontSize="14"
+                               TextColor="{StaticResource TextPrimary}" />
+                        
+                        <!-- 序列号 / Serial Number -->
+                        <Label Grid.Row="2" Grid.Column="0"
+                               Text="序列号 / Serial:"
+                               FontSize="14"
+                               TextColor="{StaticResource TextSecondary}" />
+                        <Label Grid.Row="2" Grid.Column="1"
+                               x:Name="SerialNumberLabel"
+                               FontSize="14"
+                               TextColor="{StaticResource TextPrimary}" />
+                        
+                        <!-- 功能 / Features -->
+                        <Label Grid.Row="3" Grid.Column="0"
+                               Text="支持功能 / Features:"
+                               FontSize="14"
+                               TextColor="{StaticResource TextSecondary}" />
+                        <Label Grid.Row="3" Grid.Column="1"
+                               x:Name="FeaturesLabel"
+                               FontSize="14"
+                               TextColor="{StaticResource TextPrimary}" />
+                    </Grid>
+                    
+                    <!-- 安全状态 / Security Status -->
+                    <BoxView HeightRequest="1" 
+                             Color="{StaticResource Surface}"
+                             Margin="0,10,0,10" />
+                    
+                    <Label Text="安全状态 / Security Status"
+                           FontSize="16"
+                           FontFamily="OpenSansSemiBold"
+                           TextColor="{StaticResource TextPrimary}" />
+                    
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" RowSpacing="15" ColumnSpacing="15">
+                        <!-- 是否已初始化 / Initialized -->
+                        <Label Grid.Row="0" Grid.Column="0"
+                               Text="已初始化 / Initialized:"
+                               FontSize="14"
+                               TextColor="{StaticResource TextSecondary}" />
+                        <Label Grid.Row="0" Grid.Column="1"
+                               x:Name="InitializedStatusLabel"
+                               FontSize="14"
+                               TextColor="{StaticResource TextPrimary}" />
+                        
+                        <!-- 是否已解锁 / Unlocked -->
+                        <Label Grid.Row="1" Grid.Column="0"
+                               Text="已解锁 / Unlocked:"
+                               FontSize="14"
+                               TextColor="{StaticResource TextSecondary}" />
+                        <Label Grid.Row="1" Grid.Column="1"
+                               x:Name="UnlockedStatusLabel"
+                               FontSize="14"
+                               TextColor="{StaticResource TextPrimary}" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+            
+            <!-- 操作按钮区 / Action Buttons -->
+            <VerticalStackLayout Spacing="10" IsVisible="{Binding Source={x:Reference DeviceInfoLayout}, Path=IsVisible}">
+                <Button x:Name="GetAddressButton"
+                        Text="获取地址 / Get Address"
+                        Style="{StaticResource BaseButton}"
+                        BackgroundColor="{StaticResource Secondary}"
+                        Clicked="GetAddressButton_Clicked"
+                        IsEnabled="False" />
+                
+                <Button x:Name="SignTransactionButton"
+                        Text="签名交易 / Sign Transaction"
+                        Style="{StaticResource BaseButton}"
+                        BackgroundColor="{StaticResource Secondary}"
+                        Clicked="SignTransactionButton_Clicked"
+                        IsEnabled="False" />
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage> 

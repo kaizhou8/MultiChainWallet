@@ -1,0 +1,112 @@
+name: Build and Obfuscate
+
+on:
+  push:
+    branches: [ main, release/* ]
+    paths:
+      - 'wind/MultiChainWallet/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'wind/MultiChainWallet/**'
+  workflow_dispatch:  # 允许手动触发 / Allow manual trigger
+
+env:
+  SOLUTION: 'wind/MultiChainWallet/MultiChainWallet.sln'
+  BUILD_CONFIGURATION: 'Release'
+  DOTNET_VERSION: '8.0.x'
+  PROJECT_DIR: 'wind/MultiChainWallet'
+
+jobs:
+  build-and-obfuscate:
+    name: Build and Obfuscate
+    runs-on: windows-latest
+    
+    steps:
+    # 1. 检出代码 / Checkout code
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    
+    # 2. 设置.NET / Setup .NET
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+    # 3. 恢复依赖项 / Restore dependencies
+    - name: Restore dependencies
+      run: dotnet restore ${{ env.SOLUTION }}
+    
+    # 4. 构建项目 / Build project
+    - name: Build
+      run: dotnet build ${{ env.SOLUTION }} --configuration ${{ env.BUILD_CONFIGURATION }} --no-restore
+    
+    # 5. 下载ConfuserEx / Download ConfuserEx
+    - name: Download ConfuserEx
+      shell: pwsh
+      run: |
+        cd ${{ github.workspace }}/${{ env.PROJECT_DIR }}/tools
+        ./download-confuserex.ps1
+    
+    # 6. 执行混淆 / Perform obfuscation
+    - name: Obfuscate assemblies
+      shell: pwsh
+      run: |
+        cd ${{ github.workspace }}/${{ env.PROJECT_DIR }}/tools
+        ./post-build-obfuscate.ps1 -ProjectDir "${{ github.workspace }}/${{ env.PROJECT_DIR }}" -TargetDir "${{ github.workspace }}/${{ env.PROJECT_DIR }}/bin/${{ env.BUILD_CONFIGURATION }}/net8.0" -TargetName "MultiChainWallet" -ConfigurationName "${{ env.BUILD_CONFIGURATION }}"
+    
+    # 7. 测试混淆后的程序集 / Test obfuscated assemblies
+    - name: Test obfuscated assemblies
+      shell: pwsh
+      run: |
+        cd ${{ github.workspace }}/${{ env.PROJECT_DIR }}/tools
+        ./test-obfuscation.ps1 -BuildOutputPath "${{ github.workspace }}/${{ env.PROJECT_DIR }}/bin/${{ env.BUILD_CONFIGURATION }}/net8.0" -UseObfuscated:$true
+    
+    # 8. 运行单元测试 / Run unit tests
+    - name: Test
+      run: dotnet test ${{ env.SOLUTION }} --configuration ${{ env.BUILD_CONFIGURATION }} --no-build --verbosity normal --collect:"XPlat Code Coverage"
+    
+    # 9. 收集混淆日志 / Collect obfuscation logs
+    - name: Collect obfuscation logs
+      shell: pwsh
+      run: |
+        mkdir -p ${{ github.workspace }}/logs
+        if (Test-Path "${{ github.workspace }}/${{ env.PROJECT_DIR }}/bin/${{ env.BUILD_CONFIGURATION }}/net8.0/Confused/Confused.log") {
+          Copy-Item "${{ github.workspace }}/${{ env.PROJECT_DIR }}/bin/${{ env.BUILD_CONFIGURATION }}/net8.0/Confused/Confused.log" -Destination "${{ github.workspace }}/logs/Confused.log"
+        } else {
+          Write-Host "混淆日志文件不存在 / Obfuscation log file does not exist"
+        }
+    
+    # 10. 上传混淆日志 / Upload obfuscation logs
+    - name: Upload obfuscation logs
+      uses: actions/upload-artifact@v3
+      with:
+        name: obfuscation-logs
+        path: ${{ github.workspace }}/logs
+      if: always()
+    
+    # 11. 上传构建产物 / Upload build artifacts
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: MultiChainWallet-Obfuscated
+        path: ${{ github.workspace }}/${{ env.PROJECT_DIR }}/bin/${{ env.BUILD_CONFIGURATION }}/net8.0
+    
+    # 12. 如果是发布分支，创建发布 / If release branch, create release
+    - name: Create release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/heads/release/')
+      with:
+        files: |
+          ${{ github.workspace }}/${{ env.PROJECT_DIR }}/bin/${{ env.BUILD_CONFIGURATION }}/net8.0/*.dll
+          ${{ github.workspace }}/${{ env.PROJECT_DIR }}/bin/${{ env.BUILD_CONFIGURATION }}/net8.0/*.exe
+        name: Release ${{ github.ref_name }}
+        draft: true
+        prerelease: false
+        body: |
+          MultiChainWallet Release ${{ github.ref_name }}
+          
+          This is an automatic release with obfuscated assemblies.
+          构建时间 / Build time: ${{ github.event.repository.updated_at }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 

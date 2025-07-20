@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MultiChainWallet.UI.Pages.SendTransactionPage"
+             Title="发送交易 / Send Transaction">
+    
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="30,0" VerticalOptions="Center">
+
+            <Label 
+                Text="选择发送钱包 / Select Sending Wallet"
+                FontSize="20"
+                HorizontalOptions="Center" />
+
+            <Picker 
+                x:Name="WalletPicker"
+                Title="选择钱包 / Select Wallet"
+                HorizontalOptions="Fill" />
+
+            <Label 
+                Text="接收地址 / Receiving Address"
+                FontSize="20"
+                HorizontalOptions="Center" />
+
+            <Entry 
+                x:Name="ReceiverAddressEntry"
+                Placeholder="输入接收地址 / Enter receiving address"
+                HorizontalOptions="Fill" />
+
+            <Label 
+                Text="发送金额 / Amount to Send"
+                FontSize="20"
+                HorizontalOptions="Center" />
+
+            <Entry 
+                x:Name="AmountEntry"
+                Placeholder="输入金额 / Enter amount"
+                Keyboard="Numeric"
+                HorizontalOptions="Fill" />
+
+            <Label 
+                Text="输入密码 / Enter Password"
+                FontSize="20"
+                HorizontalOptions="Center" />
+
+            <Entry 
+                x:Name="PasswordEntry"
+                Placeholder="输入密码 / Enter password"
+                IsPassword="True"
+                HorizontalOptions="Fill" />
+
+            <Button 
+                x:Name="SendButton"
+                Text="发送 / Send"
+                Clicked="OnSendClicked"
+                HorizontalOptions="Center" />
+
+            <ActivityIndicator 
+                x:Name="LoadingIndicator"
+                IsRunning="False"
+                IsVisible="False"
+                HorizontalOptions="Center" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

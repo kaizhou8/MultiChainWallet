@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            x:Class="MultiChainWallet.UI.Pages.TokenDetailsPage"
+            Title="Token Details">
+
+    <Grid Padding="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Label Grid.Row="0" 
+               Text="{Binding Token.Name}" 
+               FontSize="24" 
+               FontAttributes="Bold"
+               Margin="0,0,0,20"/>
+
+        <!-- Token Info -->
+        <Grid Grid.Row="1" Margin="0,0,0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" 
+                   Text="Symbol:" 
+                   FontAttributes="Bold"
+                   Margin="0,0,10,5"/>
+            <Label Grid.Row="0" Grid.Column="1" 
+                   Text="{Binding Token.Symbol}"/>
+
+            <Label Grid.Row="1" Grid.Column="0" 
+                   Text="Contract Address:" 
+                   FontAttributes="Bold"
+                   Margin="0,0,10,5"/>
+            <Label Grid.Row="1" Grid.Column="1" 
+                   Text="{Binding Token.ContractAddress}"/>
+
+            <Label Grid.Row="2" Grid.Column="0" 
+                   Text="Balance:" 
+                   FontAttributes="Bold"
+                   Margin="0,0,10,5"/>
+            <Label Grid.Row="2" Grid.Column="1">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="{Binding Token.Balance, StringFormat='{0:N4}'}" />
+                        <Span Text=" " />
+                        <Span Text="{Binding Token.Symbol}" />
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+
+            <Label Grid.Row="3" Grid.Column="0" 
+                   Text="Value (USD):" 
+                   FontAttributes="Bold"
+                   Margin="0,0,10,5"/>
+            <Label Grid.Row="3" Grid.Column="1">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="$" />
+                        <Span Text="{Binding Token.Value, StringFormat='{0:N2}'}" />
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+
+            <Label Grid.Row="4" Grid.Column="0" 
+                   Text="Decimals:" 
+                   FontAttributes="Bold"
+                   Margin="0,0,10,5"/>
+            <Label Grid.Row="4" Grid.Column="1" 
+                   Text="{Binding Token.Decimals}"/>
+        </Grid>
+
+        <!-- Actions -->
+        <HorizontalStackLayout Grid.Row="2" Margin="0,0,0,20">
+            <Button Text="Send" 
+                    WidthRequest="100"
+                    Margin="0,0,10,0"
+                    Clicked="SendToken_Click"/>
+            <Button Text="Back"
+                    WidthRequest="100"
+                    Clicked="Back_Click"/>
+        </HorizontalStackLayout>
+
+        <!-- Transaction History -->
+        <VerticalStackLayout Grid.Row="3">
+            <Label Text="Transaction History" 
+                   FontSize="20" 
+                   FontAttributes="Bold"
+                   Margin="0,0,0,10"/>
+            <CollectionView x:Name="TransactionListView"
+                           ItemsSource="{Binding Transactions}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Transaction Type -->
+                            <Label Grid.Column="0" 
+                                   Text="{Binding Type}"
+                                   TextColor="{Binding Type, Converter={StaticResource TransactionTypeColorConverter}}"
+                                   Margin="0,0,10,0"/>
+
+                            <!-- Transaction Details -->
+                            <VerticalStackLayout Grid.Column="1">
+                                <Label Text="{Binding Address}" FontSize="14"/>
+                                <Label Text="{Binding Date, StringFormat='{0:g}'}" 
+                                       FontSize="12" 
+                                       Opacity="0.7"/>
+                            </VerticalStackLayout>
+
+                            <!-- Amount -->
+                            <Label Grid.Column="2">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="{Binding Amount, StringFormat='{0:N4}'}" />
+                                        <Span Text=" " />
+                                        <Span Text="{Binding Symbol}" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

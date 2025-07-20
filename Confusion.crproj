@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project baseDir="." outputDir="./Confused" debug="false">
+  <!-- 全局默认保护 / Global default protection -->
+  <rule pattern="true" preset="normal" inherit="false">
+    <protection id="anti ildasm" />
+    <protection id="anti tamper" />
+    <protection id="constants" />
+    <protection id="rename" />
+    <protection id="ref proxy" />
+  </rule>
+
+  <!-- 特定高敏感度组件的最大保护 / Maximum protection for specific high-sensitivity components -->
+  <rule pattern="MultiChainWallet.Core.Services.Security.*" preset="maximum" inherit="false">
+    <protection id="anti debug" />
+    <protection id="anti dump" />
+    <protection id="anti ildasm" />
+    <protection id="anti tamper" />
+    <protection id="constants" />
+    <protection id="ctrl flow" />
+    <protection id="rename" />
+    <protection id="resources" />
+    <protection id="ref proxy" />
+  </rule>
+
+  <!-- 硬件钱包管理强化保护 / Enhanced protection for hardware wallet management -->
+  <rule pattern="MultiChainWallet.Infrastructure.Services.HardwareWalletManager" preset="aggressive" inherit="false">
+    <protection id="anti debug" />
+    <protection id="anti dump" />
+    <protection id="anti tamper" />
+    <protection id="constants" />
+    <protection id="ctrl flow" />
+    <protection id="rename" action="apply" />
+    <protection id="ref proxy" />
+  </rule>
+
+  <!-- 私钥和交易相关服务强化保护 / Enhanced protection for private key and transaction related services -->
+  <rule pattern="MultiChainWallet.Infrastructure.Services.WalletService" preset="aggressive" inherit="false">
+    <protection id="anti debug" />
+    <protection id="anti tamper" />
+    <protection id="constants" />
+    <protection id="ctrl flow" />
+    <protection id="rename" action="apply" />
+  </rule>
+
+  <!-- 必须排除的公共接口和模型（不可重命名） / Essential public interfaces and models to exclude (no rename) -->
+  <rule pattern="MultiChainWallet.Core.Interfaces.*" preset="none" inherit="false">
+    <protection id="rename" action="remove" />
+  </rule>
+  
+  <!-- 不要混淆ViewModel（避免XAML绑定问题） / Do not obfuscate ViewModels (avoid XAML binding issues) -->
+  <rule pattern="MultiChainWallet.UI.ViewModels.*" preset="none" inherit="false">
+    <protection id="rename" action="remove" />
+  </rule>
+
+  <!-- 不要重命名公共数据模型（用于序列化） / Do not rename public data models (used for serialization) -->
+  <rule pattern="MultiChainWallet.Core.Models.*" preset="none" inherit="false">
+    <protection id="rename" action="remove" />
+  </rule>
+
+  <!-- 不要重命名UI控件和页面（避免XAML问题） / Do not rename UI controls and pages (avoid XAML issues) -->
+  <rule pattern="MultiChainWallet.UI.Pages.*" preset="none" inherit="false">
+    <protection id="rename" action="remove" />
+  </rule>
+  <rule pattern="MultiChainWallet.UI.Controls.*" preset="none" inherit="false">
+    <protection id="rename" action="remove" />
+  </rule>
+
+  <!-- 以反射方式访问的类型应排除重命名 / Types accessed via reflection should exclude renaming -->
+  <rule pattern="MultiChainWallet.*.Repository.*" preset="none" inherit="false">
+    <protection id="rename" action="remove" />
+  </rule>
+
+  <!-- 程序集标记 / Assembly marking -->
+  <module path="MultiChainWallet.UI.dll" />
+  <module path="MultiChainWallet.Core.dll" />
+  <module path="MultiChainWallet.Infrastructure.dll" />
+</project> 
