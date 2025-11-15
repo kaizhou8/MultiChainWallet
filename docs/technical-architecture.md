@@ -1,9 +1,14 @@
-# Multi-Chain Cryptocurrency Wallet Technical Architecture
+# Multi-Chain Cryptocurrency Wallet Technical Architecture / 多链加密货币钱包技术架构
 
-## System Overview
+## System Overview / 系统概述
+
+**English:**  
 The Multi-Chain Cryptocurrency Wallet is a desktop wallet application that supports multiple cryptocurrencies. It provides secure cryptocurrency storage, transaction, and management capabilities.
 
-## Technology Stack
+**中文:**  
+多链加密货币钱包是一个支持多种加密货币的桌面钱包应用程序。它提供安全的加密货币存储、交易和管理功能。
+
+## Technology Stack / 技术栈
 - Framework: .NET Core
 - Database: SQLite with Dapper
 - UI Framework: WPF
@@ -11,9 +16,9 @@ The Multi-Chain Cryptocurrency Wallet is a desktop wallet application that suppo
 - Data Compression: GZip
 - Dependency Injection: Microsoft.Extensions.DependencyInjection
 
-## System Architecture
+## System Architecture / 系统架构
 
-### Core Components
+### Core Components / 核心组件
 1. Wallet Services
    - BitcoinWallet
    - EthereumWallet
@@ -40,14 +45,14 @@ The Multi-Chain Cryptocurrency Wallet is a desktop wallet application that suppo
    - Resource Monitoring
    - Performance Metrics
 
-## Data Flow
+## Data Flow / 数据流
 1. User Operations
 2. UI Layer Processing
 3. Business Logic Layer
 4. Data Access Layer
 5. Data Persistence
 
-## Security Architecture
+## Security Architecture / 安全架构
 1. Cryptographic Implementation
    - AES-256 Encryption
    - PBKDF2 Password Hashing
